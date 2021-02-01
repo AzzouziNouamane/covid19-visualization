@@ -1,7 +1,9 @@
 import express from 'express';
-import { testPost } from './controller.js';
+import { testGet, testPost } from './controller.js';
 
 const router = express.Router();
+
+router.get('/test', testGet);
 
 router.post('/test', testPost);
 

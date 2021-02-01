@@ -1,11 +1,7 @@
 import { Test } from './models/test.js';
 
 const testPost = (req, res) => {
-    const toSave = new Test(
-        {
-            test: req.body.test
-        }
-    );
+    const toSave = new Test({ str: req.body.str, numb: req.body.numb});
 
     toSave.save(function (err) {
         if (err) {
@@ -20,4 +16,12 @@ const testPost = (req, res) => {
     })
 };
 
-export { testPost }
+const testGet = async (req, res) => {
+    const test = await Test.find({});
+    res.status(200).send({
+      message: 'Successful',
+      data: test
+    });
+};
+
+export {testPost, testGet}

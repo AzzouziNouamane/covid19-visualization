@@ -2,15 +2,22 @@ import mongoose from 'mongoose';
 import assert from 'assert';
 import request from 'supertest';
 import { app } from '../src/index.js';
+import { testParse } from '../src/util/csv-parse.js';
 const requestApp = request.agent(app);
 
 describe('Test routes', () => {
-    beforeEach(async () => {
+    afterEach(async () => {
         mongoose.connection.db.dropDatabase();
+        testParse();
+    })
+
+    it('should get Test', async () => {
+        const res = await requestApp.get('/test');
+        assert.strictEqual(res.body.data.length, 4);
     })
 
     it('should post Test', async () => {
-        const res = await requestApp.post('/test').send({test: 'Test'});
-        assert.strictEqual(res.body.data.test, 'Test')
+        const res = await requestApp.post('/test').send({str: 'Test', numb: 0});
+        assert.strictEqual(res.body.data.str, 'Test')
     })
 })

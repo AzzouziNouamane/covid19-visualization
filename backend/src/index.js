@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 
 import router from './api.js';
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import { testParse } from './util/csv-parse.js';
 
 const app = express();
 
@@ -22,7 +23,8 @@ app.use('/', router);
 const port = 3001;
 
 db.once('open', function() {
-    console.log('Connected!');
+    testParse();
+    console.log('MongoDB connected!');
     app.listen(port, () => {
         console.log('Server is up and running on port ' + port);
     });
