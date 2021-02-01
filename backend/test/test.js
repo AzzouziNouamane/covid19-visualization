@@ -6,6 +6,7 @@ import { testParse } from '../src/util/csv-parse.js';
 const requestApp = request.agent(app);
 
 describe('Test routes', () => {
+    // cleaning DB after each test
     afterEach(async () => {
         mongoose.connection.db.dropDatabase();
         testParse();
