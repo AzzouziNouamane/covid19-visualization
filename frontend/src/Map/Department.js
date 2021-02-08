@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Department = ({ name, path, strokeColor, color }) => {
+const Department = ({ name, path, strokeColor, color, stripesColor, stripesOpacity }) => {
     const [opacity, setOpacity] = useState(0.5)
 
     const classes = useStyles();
@@ -30,7 +30,15 @@ const Department = ({ name, path, strokeColor, color }) => {
     const open = Boolean(anchorEl);
     return (
         <>
-            <path title={name} d={path} stroke={strokeColor} fill={color} fillOpacity={opacity} onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}></path>
+            <path
+                title={name}
+                d={path}
+                stroke={strokeColor}
+                fill="url(#diagonalHatch)"
+                fillOpacity={opacity}
+                onMouseEnter={mouseEnter}
+                onMouseLeave={mouseLeave}>
+            </path>
             <Popover
                 id="mouse-over-popover"
                 className={classes.popover}
@@ -50,6 +58,10 @@ const Department = ({ name, path, strokeColor, color }) => {
                 onClose={mouseLeave}
                 disableRestoreFocus
             >{name}</Popover>
+            <pattern id="diagonalHatch" width="5" height="5" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                <rect fill={color} x="0" y="0" width="5" height="5" strokeWidth="0"></rect>
+                <line x1="0" y1="0" x2="0" y2="10" style={{ stroke: stripesColor, strokeWidth: 5 }} opacity={stripesOpacity} />
+            </pattern>
         </>
     );
 };
@@ -58,12 +70,16 @@ Department.propTypes = {
     name: PropTypes.string.isRequired,
     path: PropTypes.string.isRequired,
     color: PropTypes.string,
-    strokeColor: PropTypes.string
+    strokeColor: PropTypes.string,
+    stripesColor: PropTypes.string,
+    stripesOpacity: PropTypes.number
 };
 
 Department.defaultProps = {
-    color: "#74B4FF",
-    strokeColor: "white"
+    color: "#8aa9eb",
+    strokeColor: "white",
+    stripesColor: "black",
+    stripesOpacity: 0.1
 };
 
 export default Department;

@@ -7,7 +7,7 @@ import Department from "./Department";
 const Map = () => {
   return (
     <svg width="578px" height="544px" viewBox="0 0 578 544">
-      <g id="carte" transform="translate(12.000000, 2.000000)" fill="#74B4FF" stroke="#000000" strokeWidth="0.4">
+      <g id="carte" transform="translate(12.000000, 12.000000)">
         {
           DEPARTMENTS.map(department => <Department key={department.id} path={department.path} name={department.name}></Department>)
         }
