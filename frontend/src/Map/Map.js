@@ -50,9 +50,12 @@ const Map = () => {
   useEffect(() => {
     simulateFetch(1000).then(res => {
       setStats(computeOpacity(res, Math.min(...res.map(stat => stat.newCases)), Math.max(...res.map(stat => stat.newCases))));
-      setWeekStats(stats.filter(stat => stat.week === 1));
     });
   }, []);
+
+  useEffect(() => {
+    setWeekStats(stats.filter(stat => stat.week === 1));
+  }, [stats]);
 
   const weekChanged = (event, newValue) => {
     setWeekStats(stats.filter(stat => stat.week === newValue));
@@ -75,14 +78,13 @@ const Map = () => {
         </g>
       </svg>
       <div className={classes.slider}>
-        <Typography id="discrete-slider-custom" gutterBottom>
-          Choisissez la semaine
+        <Typography gutterBottom>
+          Choix de la semaine
         </Typography>
         <Slider
           min={1}
           max={Math.max(...stats.map(stat => stat.week))}
           defaultValue={1}
-          aria-labelledby="discrete-slider-custom"
           step={1}
           onChange={weekChanged}
           valueLabelDisplay="auto"

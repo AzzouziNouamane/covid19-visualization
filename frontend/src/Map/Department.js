@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Popover from '@material-ui/core/Popover';
 import { makeStyles } from '@material-ui/core/styles';
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     popover: {
@@ -70,7 +71,13 @@ const Department = ({ name, redOpacity, path, newCases }) => {
                 }}
                 onClose={mouseLeave}
                 disableRestoreFocus
-            ><div style={{textAlign: 'center'}}><strong>{name}</strong></div><div>Nouveaux cas: {newCases}</div></Popover>
+            >
+                <Typography align='center'>
+                    <strong>{name}</strong>
+                </Typography>
+                <Typography>
+                    Nouveaux cas: {newCases}
+                </Typography></Popover>
         </>
     );
 };
