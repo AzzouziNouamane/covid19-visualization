@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Popover from '@material-ui/core/Popover';
 import { makeStyles } from '@material-ui/core/styles';
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     popover: {
@@ -12,19 +13,32 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Department = ({ name, path, strokeColor, color, stripesColor, stripesOpacity }) => {
-    const [opacity, setOpacity] = useState(0.5)
-
+const Department = ({ name, redOpacity, path, newCases }) => {
     const classes = useStyles();
+
+    const red = '#eb0e0e';
+    const blue = '#b6d2f0';
+    const darkBlue = '#4b5969';
+
+    const [color, setColor] = useState(redOpacity ? red : blue);
+    const [opacity, setOpacity] = useState(redOpacity || 1);
+
     const [anchorEl, setAnchorEl] = React.useState(null);
+
+    useEffect(() => {
+        setColor(redOpacity ? red : blue);
+        setOpacity(redOpacity || 1);
+    }, [redOpacity]);
 
     const mouseEnter = (event) => {
         setAnchorEl(event.currentTarget);
+        setColor(darkBlue);
         setOpacity(1);
     }
     const mouseLeave = () => {
         setAnchorEl(null);
-        setOpacity(0.5);
+        setColor(redOpacity ? red : blue);
+        setOpacity(redOpacity || 1);
     }
 
     const open = Boolean(anchorEl);
@@ -33,9 +47,9 @@ const Department = ({ name, path, strokeColor, color, stripesColor, stripesOpaci
             <path
                 title={name}
                 d={path}
-                stroke={strokeColor}
-                fill="url(#diagonalHatch)"
-                fillOpacity={opacity}
+                stroke="white"
+                fill={color}
+                opacity={opacity}
                 onMouseEnter={mouseEnter}
                 onMouseLeave={mouseLeave}>
             </path>
@@ -57,11 +71,13 @@ const Department = ({ name, path, strokeColor, color, stripesColor, stripesOpaci
                 }}
                 onClose={mouseLeave}
                 disableRestoreFocus
-            >{name}</Popover>
-            <pattern id="diagonalHatch" width="5" height="5" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
-                <rect fill={color} x="0" y="0" width="5" height="5" strokeWidth="0"></rect>
-                <line x1="0" y1="0" x2="0" y2="10" style={{ stroke: stripesColor, strokeWidth: 5 }} opacity={stripesOpacity} />
-            </pattern>
+            >
+                <Typography align='center'>
+                    <strong>{name}</strong>
+                </Typography>
+                <Typography>
+                    Nouveaux cas: {newCases}
+                </Typography></Popover>
         </>
     );
 };
@@ -69,17 +85,13 @@ const Department = ({ name, path, strokeColor, color, stripesColor, stripesOpaci
 Department.propTypes = {
     name: PropTypes.string.isRequired,
     path: PropTypes.string.isRequired,
-    color: PropTypes.string,
-    strokeColor: PropTypes.string,
-    stripesColor: PropTypes.string,
-    stripesOpacity: PropTypes.number
+    redOpacity: PropTypes.number,
+    newCases: PropTypes.number
 };
 
 Department.defaultProps = {
-    color: "#8aa9eb",
-    strokeColor: "white",
-    stripesColor: "black",
-    stripesOpacity: 0.1
+    redOpacity: 0,
+    newCases: 0
 };
 
 export default Department;
