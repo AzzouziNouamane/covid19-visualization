@@ -1,4 +1,4 @@
-import { Test } from './models/test.js';
+import { Test } from './models/casesModel.js';
 
 const testPost = (req, res) => {
     const toSave = new Test({ str: req.body.str, numb: req.body.numb});

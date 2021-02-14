@@ -1,18 +1,21 @@
 import csv from 'csv-parser';
 import fs from 'fs';
-import { Test } from '../models/test.js';
+import { Cases } from '../models/casesModel.js';
 const results = [];
 
-const testParse = () => {
-    fs.createReadStream('res/db_test.csv')
+const parse = () => {
+  fs.createReadStream('res/data.csv')
         .pipe(csv())
         .on('data', (data) => results.push(data))
         .on('end', () => {
             results.forEach(test => {
-                const toSave = new Test({ str: test.str, numb: test.numb });
-                toSave.save();
+                if( test.granularite==="departement"){
+                    const toSave = new Cases({ date: test.date, granularite: test.granularite, maille_nom: test.maille_nom,cas_confirmes : test.cas_confirmes  });
+                    toSave.save();
+                }
+
             })
         });
-}
+};
 
-export { testParse }
+export { parse }
