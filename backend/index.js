@@ -3,9 +3,9 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import { Casesparse } from './src/util/csv-parse.js';
-import {MentalHealthsparse} from "./src/util/csv-parse";
-import cases_API from './APIs/index.js';
-import mentalHealth_API from './APIs/index.js';
+import {MentalHealthsparse} from "./src/util/csv-parse.js";
+import cases_API from './src/APIs/cases/index.js';
+import mentalHealth_API from './src/APIs/MentalHealth/index.js';
 
 
 
