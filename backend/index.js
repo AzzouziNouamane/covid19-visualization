@@ -2,8 +2,6 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import { Casesparse } from './src/util/csv-parse.js';
-import {MentalHealthsparse} from "./src/util/csv-parse.js";
 import cases_API from './src/APIs/cases/index.js';
 import mentalHealth_API from './src/APIs/MentalHealth/index.js';
 
@@ -19,8 +17,7 @@ mongoose.connect("mongodb+srv://user:ws123@cluster0.zadzd.mongodb.net/<dbname>?r
         useFindAndModify: false
     }).then(()=>{
     console.log(`connection to database established`);
-    Casesparse() ;
-    MentalHealthsparse ;
+
 });
 
 

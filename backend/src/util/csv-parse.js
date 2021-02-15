@@ -10,6 +10,7 @@ const Casesparse = () => {
         .pipe(csv())
         .on('data', (data) => results.push(data))
         .on('end', () => {
+            console.log(results);
             results.forEach(test => {
                 if( test.granularite==="departement"){
                     const toSave = new Cases({ date: test.date, granularite: test.granularite, maille_nom: test.maille_nom,cas_confirmes : test.cas_confirmes  });
@@ -26,13 +27,21 @@ const MentalHealthsparse = () => {
         .pipe(csv())
         .on('data', (data) => resultsMentalHealth.push(data))
         .on('end', () => {
+            console.log(resultsMentalHealth[0]);
             resultsMentalHealth.forEach(test => {
+               let depression ;
+               let pbsommeil ;
+                    if(test.depression == " ") depression="0"
+                    else depression=test.depression;
+
+                if(test.pbsommeil == " ") pbsommeil="0"
+                else pbsommeil=test.pbsommeil;
                     const toSave = new MentalHealth({
-                        periode: test.semaine,
-                        region : regionName(test.reg),
+                        periode: test.periode,
+                        region : test.region,
                         anxiete: test.anxiete,
-                        depression: test.depression,
-                        pbsommeil : test.pbsommeil
+                        depression: depression,
+                        pbsommeil : pbsommeil
 
                     });
                     toSave.save();
