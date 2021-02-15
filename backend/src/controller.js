@@ -1,7 +1,7 @@
-import { Test } from './models/casesModel.js';
+import { Cases } from './models/casesModel.js';
 
 const testPost = (req, res) => {
-    const toSave = new Test({ str: req.body.str, numb: req.body.numb});
+    const toSave = new Cases({ str: req.body.str, numb: req.body.numb});
 
     toSave.save(function (err) {
         if (err) {

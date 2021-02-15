@@ -3,10 +3,7 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import router from './api.js';
-import { parse } from './util/csv-parse.js';
 import API from './APIs/index.js';
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import { testParse } from './util/csv-parse.js';
 
 const app = express();
 
@@ -18,7 +15,6 @@ mongoose.connect("mongodb+srv://user:ws123@cluster0.zadzd.mongodb.net/<dbname>?r
         useFindAndModify: false
     }).then(()=>{
     console.log(`connection to database established`);
-    parse() ;
 });
 app.use(cors());
 

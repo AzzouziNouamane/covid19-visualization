@@ -9,8 +9,8 @@ const parse = () => {
         .on('data', (data) => results.push(data))
         .on('end', () => {
             results.forEach(test => {
-                if( test.granularite==="departement"){
-                    const toSave = new Cases({ date: test.date, granularite: test.granularite, maille_nom: test.maille_nom,cas_confirmes : test.cas_confirmes  });
+                if( test.granularite==="region"){
+                    const toSave = new Cases({ date: test.date, region: test.maille_nom, cas_confirmes : test.cas_confirmes  });
                     toSave.save();
                 }
 
