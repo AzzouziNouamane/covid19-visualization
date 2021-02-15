@@ -1,5 +1,4 @@
 
-
 const external_API = 'https://api.covid19tracking.narrativa.com/api/2020-03-22/country/france';
 import express from 'express';
 import fetch from 'node-fetch';
@@ -15,7 +14,7 @@ router.get('/', (req, res) => {
             // do something with JSON
             res.send(json);
         });
-})
+});
 
 
 

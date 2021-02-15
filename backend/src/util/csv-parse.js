@@ -3,7 +3,7 @@ import fs from 'fs';
 import { Cases } from '../models/casesModel.js';
 const results = [];
 
-const parse = () => {
+const Casesparse = () => {
   fs.createReadStream('res/data.csv')
         .pipe(csv())
         .on('data', (data) => results.push(data))
@@ -18,4 +18,4 @@ const parse = () => {
         });
 };
 
-export { parse }
+export { Casesparse }

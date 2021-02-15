@@ -2,11 +2,10 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import router from './api.js';
-import { parse } from './util/csv-parse.js';
-import API from './APIs/index.js';
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import { testParse } from './util/csv-parse.js';
+import { Casesparse } from './util/csv-parse.js';
+import cases_API from './APIs/index.js';
+import mentalHealth_API from './APIs/index.js';
+
 
 const app = express();
 
@@ -18,15 +17,17 @@ mongoose.connect("mongodb+srv://user:ws123@cluster0.zadzd.mongodb.net/<dbname>?r
         useFindAndModify: false
     }).then(()=>{
     console.log(`connection to database established`);
-    parse() ;
+    Casesparse() ;
 });
-app.use(cors());
 
+
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-app.use('/', router);
-app.use('/', API);
+
+app.use('/', cases_API);
+app.use('/', mentalHealth_API);
 
 const port = 3001;
 
