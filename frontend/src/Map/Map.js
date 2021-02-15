@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { DEPARTMENTS } from "./departments";
-import Department from "./Department";
+import { REGIONS } from "./regions";
+import Region from "./Region";
 import { makeStyles, Slider, Typography } from "@material-ui/core";
 
 function simulateFetch(ms) {
   return new Promise(resolve => setTimeout(() => resolve([
     {
       week: 1,
-      departmentId: '83',
+      regionId: 44,
       newCases: 232
     },
     {
       week: 1,
-      departmentId: '05',
+      regionId: 28,
       newCases: 108
     },
     {
       week: 2,
-      departmentId: '83',
+      regionId: 44,
       newCases: 423
     },
     {
       week: 2,
-      departmentId: '05',
+      regionId: 28,
       newCases: 230
     },
   ]), ms));
@@ -66,20 +66,20 @@ const Map = () => {
       <svg width="578px" height="544px" viewBox="0 0 578 544">
         <g id="carte" transform="translate(12.000000, 12.000000)">
           {
-            DEPARTMENTS.map(department =>
-              <Department
-                redOpacity={weekStats.find(stat => department.id === stat.departmentId)?.opacity}
-                key={department.id}
-                path={department.path}
-                name={department.name}
-                newCases={weekStats.find(stat => department.id === stat.departmentId)?.newCases}>
-              </Department>)
+            REGIONS.map(region =>
+              <Region
+                redOpacity={weekStats.find(stat => region.id === stat.regionId)?.opacity}
+                key={region.id}
+                path={region.path}
+                name={region.name}
+                newCases={weekStats.find(stat => region.id === stat.regionId)?.newCases}>
+              </Region>)
           }
         </g>
       </svg>
       <div className={classes.slider}>
         <Typography gutterBottom>
-          Choix de la semaine
+          Choix de la vague
         </Typography>
         <Slider
           min={1}
