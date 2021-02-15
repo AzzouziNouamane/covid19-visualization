@@ -5,7 +5,7 @@ import fetch from 'node-fetch';
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/liveData', (req, res) => {
     let settings = { method: "Get" };
 
     fetch(external_API, settings)
