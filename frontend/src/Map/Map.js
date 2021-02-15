@@ -4,34 +4,46 @@ import Region from "./Region";
 import { makeStyles, Slider, Typography } from "@material-ui/core";
 
 function simulateFetch(ms) {
-  return new Promise(resolve => setTimeout(() => resolve([
-    {
-      week: 1,
-      regionId: 44,
-      newCases: 232
-    },
-    {
-      week: 1,
-      regionId: 28,
-      newCases: 108
-    },
-    {
-      week: 2,
-      regionId: 44,
-      newCases: 423
-    },
-    {
-      week: 2,
-      regionId: 28,
-      newCases: 230
-    },
-  ]), ms));
+  return new Promise(resolve => setTimeout(() => resolve(
+    [
+      {
+        id: 1,
+        date: "23-25 mars",
+        regions: [
+          {
+            regionId: 44,
+            newCases: 232
+          },
+          {
+            regionId: 28,
+            newCases: 108
+          }
+        ]
+      },
+      {
+        id: 2,
+        date: "30 mars-1 avr",
+        regions: [
+          {
+            regionId: 44,
+            newCases: 543
+          },
+          {
+            regionId: 28,
+            newCases: 243
+          }
+        ]
+      }
+    ]), ms));
 }
 
-const computeOpacity = (stats, minNewCases, maxNewCases) => {
-  return stats.map(stat => {
-    stat.opacity = ((1 - 0.2) / (maxNewCases - minNewCases)) * stat.newCases + (1 - ((1 - 0.2) / (maxNewCases - minNewCases)) * maxNewCases);
-    return stat;
+const computeOpacities = (periods, minNewCases, maxNewCases) => {
+  return periods.map(period => {
+    period.regions = period.regions.map(region => {
+      region.opacity = ((1 - 0.2) / (maxNewCases - minNewCases)) * region.newCases + (1 - ((1 - 0.2) / (maxNewCases - minNewCases)) * maxNewCases);
+      return region;
+    });
+    return period;
   });
 }
 
@@ -43,22 +55,30 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Map = () => {
-  const [stats, setStats] = useState([]);
-  const [weekStats, setWeekStats] = useState([]);
+  const [periods, setPeriods] = useState([]);
+  const [currentPeriodId, setCurrentPeriodId] = useState(1);
   const classes = useStyles();
 
   useEffect(() => {
-    simulateFetch(1000).then(res => {
-      setStats(computeOpacity(res, Math.min(...res.map(stat => stat.newCases)), Math.max(...res.map(stat => stat.newCases))));
+    simulateFetch(1000).then(periodsResult => {
+      let minNewCases = Number.MAX_SAFE_INTEGER;
+      let maxNewCases = 0;
+      for (let period of periodsResult) {
+        for (let region of period.regions) {
+          if (region.newCases < minNewCases) {
+            minNewCases = region.newCases;
+          }
+          if (region.newCases > maxNewCases) {
+            maxNewCases = region.newCases;
+          }
+        }
+      }
+      setPeriods(computeOpacities(periodsResult, minNewCases, maxNewCases));
     });
   }, []);
 
-  useEffect(() => {
-    setWeekStats(stats.filter(stat => stat.week === 1));
-  }, [stats]);
-
-  const weekChanged = (event, newValue) => {
-    setWeekStats(stats.filter(stat => stat.week === newValue));
+  const periodChanged = (event, newValue) => {
+    setCurrentPeriodId(newValue);
   }
 
   return (
@@ -68,25 +88,25 @@ const Map = () => {
           {
             REGIONS.map(region =>
               <Region
-                redOpacity={weekStats.find(stat => region.id === stat.regionId)?.opacity}
+                redOpacity={periods.find(p => p.id === currentPeriodId)?.regions.find(r => region.id === r.regionId)?.opacity}
                 key={region.id}
                 path={region.path}
                 name={region.name}
-                newCases={weekStats.find(stat => region.id === stat.regionId)?.newCases}>
+                newCases={periods.find(p => p.id === currentPeriodId)?.regions.find(r => region.id === r.regionId)?.newCases}>
               </Region>)
           }
         </g>
       </svg>
       <div className={classes.slider}>
         <Typography gutterBottom>
-          Choix de la vague
+          Choix de la période
         </Typography>
         <Slider
           min={1}
-          max={Math.max(...stats.map(stat => stat.week))}
+          max={periods.length || 2}
           defaultValue={1}
           step={1}
-          onChange={weekChanged}
+          onChange={periodChanged}
           valueLabelDisplay="auto"
         />
       </div>
