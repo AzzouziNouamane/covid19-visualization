@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { REGIONS } from "./regions";
 import Region from "./Region";
-import { makeStyles, Slider, Typography } from "@material-ui/core";
+import { makeStyles, Slider, Tooltip, Typography } from "@material-ui/core";
 
 function simulateFetch(ms) {
   return new Promise(resolve => setTimeout(() => resolve(
     [
       {
-        id: 1,
         date: "23-25 mars",
         regions: [
           {
@@ -21,7 +20,6 @@ function simulateFetch(ms) {
         ]
       },
       {
-        id: 2,
         date: "30 mars-1 avr",
         regions: [
           {
@@ -78,7 +76,11 @@ const Map = () => {
   }, []);
 
   const periodChanged = (event, newValue) => {
-    setCurrentPeriodId(newValue);
+    setCurrentPeriodId(newValue - 1);
+  }
+
+  const sliderLabelFormat = () => {
+    return periods[currentPeriodId]?.date || currentPeriodId + '';
   }
 
   return (
@@ -88,11 +90,11 @@ const Map = () => {
           {
             REGIONS.map(region =>
               <Region
-                redOpacity={periods.find(p => p.id === currentPeriodId)?.regions.find(r => region.id === r.regionId)?.opacity}
+                redOpacity={periods[currentPeriodId]?.regions.find(r => region.id === r.regionId)?.opacity}
                 key={region.id}
                 path={region.path}
                 name={region.name}
-                newCases={periods.find(p => p.id === currentPeriodId)?.regions.find(r => region.id === r.regionId)?.newCases}>
+                newCases={periods[currentPeriodId]?.regions.find(r => region.id === r.regionId)?.newCases}>
               </Region>)
           }
         </g>
@@ -107,6 +109,14 @@ const Map = () => {
           defaultValue={1}
           step={1}
           onChange={periodChanged}
+          valueLabelFormat={sliderLabelFormat}
+          ValueLabelComponent={({ children, open, value }) => {
+            return (
+              <Tooltip open={open} enterTouchDelay={0} placement="top" title={value}>
+                {children}
+              </Tooltip>
+            );
+          }}
           valueLabelDisplay="auto"
         />
       </div>
