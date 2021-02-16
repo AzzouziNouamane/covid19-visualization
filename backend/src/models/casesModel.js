@@ -1,10 +1,14 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
-var CasesNumbersSchema = new Schema({
-    date: { type: String, required: true, max: 100 },
-    region: { type: String, required: true },
-    cas_confirmes: { type: String, required: false}
+const CasesNumbersSchema = new Schema({
+    date: {type: String, required: true, max: 100},
+    regions: [{
+        regionId: {type: String, required: true},
+        newCases: {type: Number, required: true}
+    }
+    ]
+
 });
 
 export const Cases = mongoose.model('Cases', CasesNumbersSchema);

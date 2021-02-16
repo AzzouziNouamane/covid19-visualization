@@ -15,6 +15,7 @@ mongoose.connect("mongodb+srv://user:ws123@cluster0.zadzd.mongodb.net/<dbname>?r
         useFindAndModify: false
     }).then(()=>{
     console.log(`connection to database established`);
+
 });
 app.use(cors());
 

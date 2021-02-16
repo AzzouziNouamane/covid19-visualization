@@ -17,10 +17,10 @@ router.post('/parse', (req, res) => {
 
 router.get('/', (req, res) => {
     try {
-        Cases.find({}, function(err, cases) {
-            console.log(cases);
+        Cases.find({date : req.body.date}, function(err, cases) {
+            res.json(cases);
         });
-        res.json("ok");
+
     }catch (e) {
         res.json({"error" : e})
     }
