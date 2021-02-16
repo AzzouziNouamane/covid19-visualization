@@ -5,52 +5,62 @@ const results = [];
 
 
 const parse = async () => {
-  fs.createReadStream('res/data.csv')
+  fs.createReadStream('res/data2.csv')
         .pipe(csv())
         .on('data', (data) => results.push(data))
         .on('end', async () => {
             for (const stat of results) {
-                if( stat.granularite==="region"){
-                    let month = stat.date.split('-')[1];
-                    let year = stat.date.split('-')[0];
+                console.log(stat);
+                let month = stat.jour.split('/')[0];
+                    let year = stat.jour.split('/')[2];
                     let date = month +"-"+ year;
-                    let region_code = stat.maille_code.split('-')[1] ;
                     const cases = await Cases.findOne({"date" : date});
                     let nb_cases = 0;
-                    console.log(stat.cas_confirmes);
-                    if((stat.cas_confirmes !== undefined) && (stat.cas_confirmes !== null) && (stat.cas_confirmes !=="")){
-                        nb_cases = parseFloat( stat.cas_confirmes )
+                    console.log(stat.positif);
+                    if((stat.positif !== undefined) && (stat.positif !== null) && (stat.positif !=="")){
+                        nb_cases = parseFloat( stat.positif)
                     }else {
                         nb_cases = 0;
                     }
                     if(cases !== null){
-                        const region = await cases.regions.find(element => element.regionId === region_code);
+                        const region = await cases.regions.find(element => element.regionId === stat.reg);
 
                         if (region !== undefined){
-                            console.log("set" + "   region" + region_code + "    date:"+ date);
+                            console.log("set" + "   region" + stat.reg + "    date:"+ date);
                             let newCases = region.newCases + nb_cases;
-                            let modified = await Cases.findOneAndUpdate({"_id" : cases._id, "regions.regionId": region_code},  { $set: { "regions.$.newCases": newCases }},function(err){
-                                if(err){
-                                    console.log(err);
-                                }});
+
+                           let modified= await Cases.findOneAndUpdate({ "regions._id": region._id, "regions.regionId": stat.reg}, {"regions.$.newCases": newCases});
+
                             console.log("modified set :"+ modified)
                         }else {
-                            console.log("push" + "   region" + region_code + "    date:"+ date);
+                            console.log("push" + "   region" + stat.reg + "    date:"+ date);
                             let data = {
-                                "regionId": region_code,
+                                "regionId": stat.reg,
                                 "newCases":nb_cases
                             };
-                            let modified = await Cases.findOneAndUpdate({date: date},  { $push: { regions : data }},function(err){
-                                if(err){
-                                    console.log(err);
-                                }});
+
+                            let modified = await Cases.findOne({date: date}, function (err, item) {
+                                if (err) {
+                                    reject(err);
+                                } else {
+                                    item.regions.push(data);
+                                    item.save().then((result) => {
+                                        console.log(result)
+                                    }).catch((err) => {
+                                        reject(err)
+                                    });
+                                }
+                            }).catch((err) => {
+                                console.log(err)
+                            });
+
                             console.log("modified set :"+ modified)
 
 
                         }
                     }else {
                         let data = [{
-                            "regionId": region_code,
+                            "regionId": stat.reg,
                             "newCases":nb_cases
                         }];
                         const toSave = new Cases({ date: date, regions : data });
@@ -59,7 +69,7 @@ const parse = async () => {
 
                 }
 
-            }
+
         });
 };
 
