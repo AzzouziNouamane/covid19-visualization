@@ -1,14 +1,12 @@
-
-
 import express from 'express';
 const router = express.Router();
-import { parse } from '../../util/csv-parse.js';
+import { Casesparse } from '../../util/csv-parse.js';
 import { Cases } from '../../models/casesModel.js';
 
 
 router.post('/parse', (req, res) => {
     try {
-        parse();
+        Casesparse();
         res.json("parsed");
     }catch (e) {
         res.json({"error" : e})
