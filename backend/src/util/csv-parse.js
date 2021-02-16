@@ -1,7 +1,7 @@
 import csv from 'csv-parser';
 import fs from 'fs';
 import { Cases } from '../models/casesModel.js';
-import { MentalHealth } from '../models/mentalHealthModel';
+import { MentalHealth } from '../models/mentalHealthModel.js';
 const results = [];
 const resultsMentalHealth = [];
 
