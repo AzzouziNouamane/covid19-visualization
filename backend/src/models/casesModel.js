@@ -12,4 +12,4 @@ var CasesNumbersSchema = new Schema(
 
 );
 
-export const Cases = mongoose.model('Cases', CasesNumbersSchema);
+export const Cases = mongoose.model('casespemonth', CasesNumbersSchema);
