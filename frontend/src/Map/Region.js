@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Department = ({ name, redOpacity, path, newCases }) => {
+const Region = ({ name, redOpacity, path, newCases }) => {
     const classes = useStyles();
 
     const red = '#eb0e0e';
@@ -82,16 +82,16 @@ const Department = ({ name, redOpacity, path, newCases }) => {
     );
 };
 
-Department.propTypes = {
+Region.propTypes = {
     name: PropTypes.string.isRequired,
     path: PropTypes.string.isRequired,
     redOpacity: PropTypes.number,
     newCases: PropTypes.number
 };
 
-Department.defaultProps = {
+Region.defaultProps = {
     redOpacity: 0,
     newCases: 0
 };
 
-export default Department;
+export default Region;
