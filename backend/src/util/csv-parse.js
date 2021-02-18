@@ -81,13 +81,21 @@ const MentalHealthsparse = () => {
         .pipe(csv())
         .on('data', (data) => resultsMentalHealth.push(data))
         .on('end', () => {
+            console.log(resultsMentalHealth[0]);
             resultsMentalHealth.forEach(test => {
+               let depression ;
+               let pbsommeil ;
+                    if(test.depression == " ") depression="0"
+                    else depression=test.depression;
+
+                if(test.pbsommeil == " ") pbsommeil="0"
+                else pbsommeil=test.pbsommeil;
                     const toSave = new MentalHealth({
-                        periode: test.semaine,
-                        region : regionName(test.reg),
+                        periode: test.periode,
+                        region : test.region,
                         anxiete: test.anxiete,
-                        depression: test.depression,
-                        pbsommeil : test.pbsommeil
+                        depression: depression,
+                        pbsommeil : pbsommeil
 
                     });
                     toSave.save();
