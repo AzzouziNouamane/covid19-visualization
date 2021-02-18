@@ -1,6 +1,8 @@
 import express from 'express';
 const router = express.Router();
+
 import { CasesParsePerDay, CasesParsePerMonth } from '../../util/csv-parse-cases-number.js';
+
 import { Cases } from '../../models/casesModel.js';
 import {CasesPerDay} from "../../models/casesModelPerDay.js";
 import {MinMax} from "../../models/min-max-nb-case.js";
@@ -17,7 +19,9 @@ router.post('/parse/per/month', async (req, res) => {
 
 router.post('/parse/per/day', async (req, res) => {
     try {
+
         await CasesParsePerDay();
+
         res.json("parsed");
     }catch (e) {
         res.json({"error" : e})
