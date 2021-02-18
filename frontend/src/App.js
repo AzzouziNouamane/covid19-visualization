@@ -1,11 +1,11 @@
 import React from "react";
 import Cases from "./Cases/cases";
-import Map from "./Map/Map"
+import ListMap from "./ListMap/ListMap"
 
 const App = () => {
   return (
     <div>
-      <Map></Map>
+      <ListMap></ListMap>
       <Cases></Cases>
     </div>
   );
