@@ -60,10 +60,26 @@ router.get('/data', (req, res) => {
     }
 });
 
-function formatDate(date) {
+function formatDate(period) {
 
-    let s = date.split(": ");
-    return s[1];
+    let s = period.split("-");
+    let date = s[1].split(" ");
+    console.log(date[0])
+    return new Date(2020,months[date[1]]-1,parseInt(date[0])+1);
 
+}
+var months = {
+    'Jan' : '1',
+    'Feb' : '2',
+    'mars' : '3',
+    'avr' : '4',
+    'mai' : '5',
+    'juin' : '6',
+    'juillet' : '7',
+    'août' : '8',
+    'sept.' : '9',
+    'oct.' : '10',
+    'Nov' : '11',
+    'Dec' : '12'
 }
 export default router;
