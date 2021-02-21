@@ -1,10 +1,9 @@
 import React from "react";
+
 import Cases from "./Cases/cases";
 import RegionsStats from "./RegionsStats/RegionsStats"
 import {BrowserRouter,Route, Switch} from 'react-router-dom';
 import Authentification from './Authentification/authentification';
-
-
 
 const App = () => {
   return (
