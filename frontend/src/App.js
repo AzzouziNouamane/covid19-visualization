@@ -1,5 +1,5 @@
 import React from "react";
-import Cases from "./Cases/Cases";
+import Cases from "./Cases/cases";
 import RegionsStats from "./RegionsStats/RegionsStats"
 
 const App = () => {
