@@ -14,6 +14,7 @@ function simulateMinMaxNewCasesFetch(ms) {
 }
 
 const Map = ({ regionsNewCasesData }) => {
+
   const [regionsNewCases, setRegionsNewCases] = useState([]);
   const [minNewCases, setMinNewCases] = useState(0);
   const [maxNewCases, setMaxNewCases] = useState(0);

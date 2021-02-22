@@ -19,6 +19,7 @@
     "mongoose": "^5.11.16",
     "node-fetch": "^2.6.1",
     "react-router": "^5.2.0"
+    "prop-types": "^15.7.2"
   },
   "devDependencies": {
     "mocha": "^8.3.0",

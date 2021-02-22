@@ -1,5 +1,4 @@
 import React from "react";
-
 import Cases from "./Cases/cases";
 import RegionsStats from "./RegionsStats/RegionsStats"
 import {BrowserRouter,Route, Switch} from 'react-router-dom';
