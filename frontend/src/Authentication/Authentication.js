@@ -1,13 +1,9 @@
 import React from 'react';
 import { withFormik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import "./login.css";
-import { useHistory } from 'react-router';
-import {
-    Link ,
-} from "react-router-dom";
+import "./Authentication.css";
 
-const Authentification = (props) => {
+const Authentication = (props) => {
     const loginPageStyle = {
         margin: "32px auto 37px",
         maxWidth: "530px",
@@ -67,6 +63,6 @@ const LoginFormik = withFormik({
 
     },
 
-})(Authentification);
+})(Authentication);
 
 export default LoginFormik

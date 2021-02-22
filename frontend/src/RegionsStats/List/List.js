@@ -1,7 +1,7 @@
 import { Table } from "reactstrap";
 import PropTypes from "prop-types";
 import React from "react";
-import './list.css';
+import './List.css';
 
 
 export const List = ({ columns, regionsNewCasesData }) => (

@@ -3,7 +3,6 @@ import Map from "./Map/Map";
 import List from "./List/List";
 import { NEW_CASES_MOCK } from "./new-cases-mock"
 import DateSlider from "./DateSlider/DateSlider";
-import "bootstrap/dist/css/bootstrap.min.css";
 function simulateFetchNewCases(date, ms) {
     return new Promise(resolve => setTimeout(() => resolve(NEW_CASES_MOCK.find(d => d.date.getTime() === date.getTime())?.regions), ms));
 }
@@ -21,9 +20,9 @@ const RegionsStats = () => {
     const columns=["regionId", "newCases"];
     return (
         <>
-            { modeMap && <List columns={columns} regionsNewCasesData={regionsNewCases}></List>}
-            { !modeMap && <Map regionsNewCasesData={regionsNewCases}></Map>}
-            <DateSlider onDateChange={onDateChange}></DateSlider>
+            { modeMap && <List columns={columns} regionsNewCasesData={regionsNewCases}/>}
+            { !modeMap && <Map regionsNewCasesData={regionsNewCases}/>}
+            <DateSlider onDateChange={onDateChange}/>
         </>
     );
 };
