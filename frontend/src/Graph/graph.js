@@ -1,15 +1,16 @@
-import Chart from "react-google-charts";
+import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import Charto from "./chart";
 
 const api_URL = "http://localhost:3001/";
 
 const Graph = ({regionId}) => {
+    let params = useParams();
     const [nb_cases, setCases] = useState({});
     const [nb_mental_cases, setMental] = useState({});
 
     const fetchData = async () => {
-        const response_nb_cases = await fetch(api_URL +"nbcases/data/month/" + "53");
+        const response_nb_cases = await fetch(api_URL +"nbcases/data/month/" + params.regionId);
         let elt_cases = [[
             { type: 'date', label: 'Day' },
             'Number of cases ',
@@ -20,11 +21,12 @@ const Graph = ({regionId}) => {
             elt_cases.push(elt)
         });
         setCases(elt_cases);
+        console.log(elt_cases);
 
     };
 
     const fetchDataMentalCases = async ()=>{
-        const response_nb_mental = await fetch(api_URL +"mentalHealth/data/month/" + "53");
+        const response_nb_mental = await fetch(api_URL +"mentalHealth/data/month/" + params.regionId);
         let elt_mental =[[
             { type: 'date', label: 'Day' },
             'Number of mental health issues ( depression, anxiety, problems of sleep',
@@ -35,6 +37,7 @@ const Graph = ({regionId}) => {
            elt_mental.push(elt)
         });
         setMental(elt_mental);
+        console.log(elt_mental);
     };
 
     useEffect(async () => {
@@ -44,6 +47,7 @@ const Graph = ({regionId}) => {
     }, []);
     return (
         <div>
+
             <Charto data={nb_cases}></Charto>
             <Charto data={nb_mental_cases}></Charto>
         </div>

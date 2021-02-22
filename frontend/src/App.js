@@ -1,14 +1,17 @@
 import React from "react";
-import Cases from "./Cases/cases";
 import RegionsStats from "./RegionsStats/RegionsStats"
-import Graph from "./Graph/graph";
+import {BrowserRouter,Route, Switch} from 'react-router-dom';
+import Authentication from './Authentication/Authentication';
 
 const App = () => {
   return (
     <div>
-        <Graph></Graph>
-      <RegionsStats></RegionsStats>
-      <Cases></Cases>
+        <BrowserRouter>
+        <Switch>
+            <Route exact path='/authentication' component={Authentication} />
+            <Route exact path='/home' component={RegionsStats} />
+        </Switch>
+        </BrowserRouter>
     </div>
   );
 };

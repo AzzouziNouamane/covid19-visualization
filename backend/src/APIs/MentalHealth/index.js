@@ -14,6 +14,7 @@ router.post('/parse', (req, res) => {
     }
 });
 
+
 router.get('/data', (req, res) => {
         let result = [];
         let dates = ['Vague 1 : 23-25 mars'];

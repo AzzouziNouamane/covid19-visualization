@@ -50,7 +50,7 @@ router.get('/data/month/:id', async (req, res) => {
         cases.forEach(cases =>{
             let nb_cases = cases.regions.find(element => element.regionId === req.params.id).newCases ;
             let month = parseInt(cases.date.split("-")[0]);
-            console.log(month);
+
             let year = parseInt(cases.date.split("-")[1]);
             let data = [year, month, nb_cases];
             result.push(data);
@@ -67,7 +67,6 @@ router.get('/data/month/:id', async (req, res) => {
 router.get('/data/day', (req, res) => {
     try {
         let day_date = new Date(req.body.date);
-        console.log(day_date);
         CasesPerDay.find({date : day_date}, function(err, cases) {
             res.json(cases);
         });

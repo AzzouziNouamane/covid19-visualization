@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { REGIONS } from "./regions";
 import Region from "./Region";
+import {Route, Link, BrowserRouter, Switch, Redirect} from "react-router-dom";
+import Graph from "../../Graph/graph";
 
 const computeOpacities = (regionsNewCases, minNewCases, maxNewCases) => {
   return regionsNewCases.map(region => {
@@ -14,6 +16,7 @@ function simulateMinMaxNewCasesFetch(ms) {
 }
 
 const Map = ({ regionsNewCasesData }) => {
+
   const [regionsNewCases, setRegionsNewCases] = useState([]);
   const [minNewCases, setMinNewCases] = useState(0);
   const [maxNewCases, setMaxNewCases] = useState(0);
@@ -30,20 +33,31 @@ const Map = ({ regionsNewCasesData }) => {
   }, [regionsNewCasesData, minNewCases, maxNewCases]);
 
   return (
-    <svg width="578px" height="544px" viewBox="0 0 578 544">
-      <g id="carte" transform="translate(12.000000, 12.000000)">
-        {
-          REGIONS.map(region =>
-            <Region
-              redOpacity={regionsNewCases.find(r => region.id === r.regionId)?.opacity}
-              key={region.id}
-              path={region.path}
-              name={region.name}
-              newCases={regionsNewCases.find(r => region.id === r.regionId)?.newCases}>
-            </Region>)
-        }
-      </g>
-    </svg>
+      <BrowserRouter>
+        <div>
+
+        <svg width="578px" height="544px" viewBox="0 0 578 544">
+          <g id="carte" transform="translate(12.000000, 12.000000)">
+            {
+              REGIONS.map(region =>
+                  <Link to={'/graph/'+region.id}>
+                    <Region
+                        redOpacity={regionsNewCases.find(r => region.id === r.regionId)?.opacity}
+                        key={region.id}
+                        path={region.path}
+                        name={region.name}
+                        newCases={regionsNewCases.find(r => region.id === r.regionId)?.newCases}>
+                    </Region>
+                  </Link>)
+            }
+          </g>
+        </svg>
+          <Switch>
+            <Route exact path='/graph/:regionId' component={Graph}/>
+          </Switch>
+      </div>
+      </BrowserRouter>
+
   );
 };
 

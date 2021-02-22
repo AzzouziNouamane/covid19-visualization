@@ -45,7 +45,6 @@ const Region = ({ name, redOpacity, path, newCases }) => {
     return (
         <>
             <path
-                title={name}
                 d={path}
                 stroke="white"
                 fill={color}
