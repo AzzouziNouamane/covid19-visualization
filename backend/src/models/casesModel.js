@@ -3,13 +3,14 @@ const Schema = mongoose.Schema;
 
 var CasesNumbersSchema = new Schema(
     {
-
-    date: { type: String, required: true, max: 100 },
-    granularite: { type: String, required: true },
-    maille_nom: { type: String, required: true },
-    cas_confirmes: { type: String, required: false}
-}
+        date: {type: String, required: true, max: 100},
+        regions: [{
+            regionId: {type: String, required: true},
+            newCases: {type: Number, required: true}
+        }
+        ]
+    }
 
 );
 
-export const Cases = mongoose.model('casespemonth', CasesNumbersSchema);
+export const Cases = mongoose.model('casespermonths', CasesNumbersSchema);

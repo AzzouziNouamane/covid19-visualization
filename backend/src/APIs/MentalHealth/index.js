@@ -60,10 +60,48 @@ router.get('/data', (req, res) => {
     }
 });
 
-function formatDate(date) {
+router.get('/data/month/:id', async (req, res) => {
+    let mcases = await MentalHealth.find({"region": req.params.id});
+    let months = ["jan", "feb", "mars", "avr", "mai", "juin", "juillet", "août", "sept", "oct", "nov", "dec"];
+    let result_m = [];
+    mcases.forEach( elt => {
+        let month = elt.periode.split(" ").pop().split(".")[0] ;
+        let month_index = months.indexOf(month)+1;
+        if (result_m[month_index] === undefined){
+            result_m[month_index] = parseInt(elt.anxiete) + parseInt(elt.depression) + parseInt(elt.pbsommeil);
+        } else {
+            result_m[month_index] += parseInt(elt.anxiete) + parseInt(elt.depression) + parseInt(elt.pbsommeil);
+        }
+    });
+    let result = [];
+    result_m.forEach(elt =>{
+        let data = [2020, result_m.indexOf(elt), elt];
+        result.push(data);
+    });
+    return res.json(result);
 
-    let s = date.split(": ");
-    return s[1];
+});
 
+function formatDate(period) {
+
+    let s = period.split("-");
+    let date = s[1].split(" ");
+    console.log(date[0]);
+    return new Date(2020,months[date[1]]-1,parseInt(date[0])+1);
+
+}
+var months = {
+    'Jan' : '1',
+    'Feb' : '2',
+    'mars' : '3',
+    'avr' : '4',
+    'mai' : '5',
+    'juin' : '6',
+    'juillet' : '7',
+    'août' : '8',
+    'sept.' : '9',
+    'oct.' : '10',
+    'Nov' : '11',
+    'Dec' : '12'
 }
 export default router;
