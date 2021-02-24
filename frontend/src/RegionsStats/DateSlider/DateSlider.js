@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import { makeStyles, Slider, Tooltip, Typography } from "@material-ui/core";
-import moment from 'moment-timezone';
+import moment from 'moment/min/moment-with-locales';
 import PropTypes from "prop-types";
 import ThemeContext from "../../Context/Theme/ThemeContext";
 
@@ -14,6 +14,8 @@ const useStyles = makeStyles((theme) => ({
 function computeDifferenceInDays(date1, date2) {
     return (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24);
 }
+
+moment.locale('fr');
 
 const DateSlider = ({onDateChange, minDate, maxDate}) => {
     const [firstDatasetDate, setFirstDatasetDate] = useState(null);
@@ -45,13 +47,13 @@ const DateSlider = ({onDateChange, minDate, maxDate}) => {
     }
 
     const sliderLabelFormat = () => {
-        return selectedDate ? moment(selectedDate).format('DD/MM/YYYY') : '';
+        return selectedDate ? moment(selectedDate).format('DD MMMM YYYY') : '';
     }
 
     return (
         <div className={classes.slider}>
                 <Typography align='center'>
-                    Date
+                    Date: { sliderLabelFormat() }
                 </Typography>
                 <Slider
                     color={ theme.isDark ? 'secondary': 'primary' }
