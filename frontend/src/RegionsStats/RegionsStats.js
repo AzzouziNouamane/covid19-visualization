@@ -2,8 +2,12 @@ import React, {useEffect, useState} from "react";
 import Map from "./Map/Map";
 import List from "./List/List";
 import DateSlider from "./DateSlider/DateSlider";
-import "./RegionsStats.css";
+import "./RegionsStats.scss";
 import {computeDifferenceInDays, linear} from "../Utils/utils";
+import Toggle from "react-toggle";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faGlobeEurope, faList} from "@fortawesome/free-solid-svg-icons";
+import {REGIONS} from "./Map/regions";
 
 const RegionsStats = () => {
     const [newCasesNow, setNewCasesNow] = useState([]);
@@ -26,14 +30,20 @@ const RegionsStats = () => {
             casesPerDay = await casesPerDay.json();
             mentalHealthPerDay = await mentalHealthPerDay.json();
 
-            casesPerDay = casesPerDay.map(day => {
+            const filterDay = (day) => {
                 day.date = new Date(day.date);
+                const regions = [];
+                for (const region of day.regions) {
+                    if (REGIONS.find(r => r.id + "" === region.regionId)) {
+                        regions.push(region);
+                    }
+                }
+                day.regions = regions;
                 return day;
-            });
-            mentalHealthPerDay = mentalHealthPerDay.map(day => {
-                day.date = new Date(day.date);
-                return day;
-            });
+            }
+
+            casesPerDay = casesPerDay.map(day => filterDay(day));
+            mentalHealthPerDay = mentalHealthPerDay.map(day => filterDay(day));
 
             setMinMaxNewCasesEver(casesPerDay);
             setMinMaxNewCasesNow(casesPerDay[0].regions);
@@ -122,17 +132,36 @@ const RegionsStats = () => {
         setMentalHealthNow(computeMentalHealthAtDate(newDate, mentalHealthPerDay));
     };
 
+    const onModeMapChange = () => {
+        setModeMap(!modeMap);
+    };
+
     const columns=["regionId", "newCases"];
     return (
         <div className="RegionsStats">
-            <DateSlider minDate={minDate} maxDate={maxDate} onDateChange={onDateChange}/>
-            { !modeMap && <List columns={columns} newCasesNow={newCasesNow || []}/>}
-            { modeMap && <Map minNewCasesNow={minNewCasesNow}
-                              maxNewCasesNow={maxNewCasesNow}
-                              minNewCasesEver={minNewCasesEver}
-                              maxNewCasesEver={maxNewCasesEver}
-                              newCasesNow={newCasesNow || []}
-                              mentalHealthNow={mentalHealthNow || []}/>}
+            <div id="display">
+                <DateSlider minDate={minDate} maxDate={maxDate} onDateChange={onDateChange}/>
+                { !modeMap && <List columns={columns} newCasesNow={newCasesNow || []}/>}
+                { modeMap && <Map minNewCasesNow={minNewCasesNow}
+                                  maxNewCasesNow={maxNewCasesNow}
+                                  minNewCasesEver={minNewCasesEver}
+                                  maxNewCasesEver={maxNewCasesEver}
+                                  newCasesNow={newCasesNow || []}
+                                  mentalHealthNow={mentalHealthNow || []}/>}
+            </div>
+            <div id="mapMode">
+                <Toggle
+                    icons={{
+                        checked: (
+                            <FontAwesomeIcon icon={faList} />
+                        ),
+                        unchecked: (
+                            <FontAwesomeIcon icon={faGlobeEurope} />
+                        ),
+                    }}
+                    onChange={onModeMapChange}
+                />
+            </div>
         </div>
     );
 };
