@@ -84,15 +84,24 @@ const Region = ({ id, name, regionNewCases, minNewCasesNow, maxNewCasesNow, minN
                 <Typography>
                     Nouveaux cas: {regionNewCases}
                 </Typography>
-                <Typography>
-                    Anxiété: {mentalHealthNow?.anxiete || '?'}
-                </Typography>
-                <Typography>
-                    Dépression: {mentalHealthNow?.depression || '?'}
-                </Typography>
-                <Typography>
-                    Problèmes de sommeil: {mentalHealthNow?.pbsommeil || '?'}
-                </Typography>
+                {
+                    mentalHealthNow?.anxiete &&
+                    <Typography>
+                        Anxiété: {mentalHealthNow?.anxiete}
+                    </Typography>
+                }
+                {
+                    mentalHealthNow?.depression &&
+                    <Typography>
+                        Dépression: {mentalHealthNow?.depression}
+                    </Typography>
+                }
+                {
+                    mentalHealthNow?.pbsommeil &&
+                    <Typography>
+                        Problèmes de sommeil: {mentalHealthNow?.pbsommeil}
+                    </Typography>
+                }
             </Popover>
         </>
     );

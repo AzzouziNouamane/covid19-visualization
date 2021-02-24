@@ -32,9 +32,6 @@ const RegionsStats = () => {
             });
             mentalHealthPerDay = mentalHealthPerDay.map(day => {
                 day.date = new Date(day.date);
-                for (const region of day.regions) {
-                    region.badMoodTotal = (+region.anxiete + +region.depression + +region.pbsommeil) / 3;
-                }
                 return day;
             });
 
@@ -46,7 +43,7 @@ const RegionsStats = () => {
             setNewCasesNow(casesPerDay[0].regions);
 
             setMentalHealthPerDay(mentalHealthPerDay);
-            setMentalHealthNow(mentalHealthPerDay[6].regions);
+            setMentalHealthNow(computeMentalHealthAtDate(casesPerDay[0].date, mentalHealthPerDay))
         });
     }, []);
 
@@ -86,7 +83,7 @@ const RegionsStats = () => {
         }
     }
 
-    const computeMentalHealthAtDate = (newDate) => {
+    const computeMentalHealthAtDate = (newDate, mentalHealthPerDay) => {
         const mentalHealth = mentalHealthPerDay.find(mentalHealth => mentalHealth.date.getTime() === newDate.getTime())?.regions || [];
         if (mentalHealth.length === 0 && mentalHealthPerDay.length > 1) {
             for (let i = 0; i < mentalHealthPerDay.length-1; i++) {
@@ -122,7 +119,7 @@ const RegionsStats = () => {
         setMinMaxNewCasesNow(regions);
         setNewCasesNow(regions);
 
-        setMentalHealthNow(computeMentalHealthAtDate(newDate));
+        setMentalHealthNow(computeMentalHealthAtDate(newDate, mentalHealthPerDay));
     };
 
     const columns=["regionId", "newCases"];
