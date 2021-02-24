@@ -3,6 +3,7 @@ import { makeStyles, Slider, Tooltip, Typography } from "@material-ui/core";
 import moment from 'moment/min/moment-with-locales';
 import PropTypes from "prop-types";
 import ThemeContext from "../../Context/Theme/ThemeContext";
+import {computeDifferenceInDays} from "../../Utils/time";
 
 const useStyles = makeStyles((theme) => ({
     slider: {
@@ -10,10 +11,6 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: 10
     }
 }));
-
-function computeDifferenceInDays(date1, date2) {
-    return (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24);
-}
 
 moment.locale('fr');
 

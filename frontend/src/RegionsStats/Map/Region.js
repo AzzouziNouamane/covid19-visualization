@@ -21,7 +21,7 @@ const computeOpacity = (regionNewCases, minNewCases, maxNewCases) => {
     return ((1 - 0.05) / (maxNewCases - minNewCases)) * regionNewCases + (1 - ((1 - 0.05) / (maxNewCases - minNewCases)) * maxNewCases);
 }
 
-const Region = ({ id, name, regionNewCases, minNewCasesDate, maxNewCasesDate, minNewCasesAllDates, maxNewCasesAllDates, path }) => {
+const Region = ({ id, name, regionNewCases, minNewCasesNow, maxNewCasesNow, minNewCasesEver, maxNewCasesEver, path, mentalHealthNow }) => {
     const classes = useStyles();
 
     const theme = useContext(ThemeContext);
@@ -29,16 +29,16 @@ const Region = ({ id, name, regionNewCases, minNewCasesDate, maxNewCasesDate, mi
     const red = '#eb0e0e';
     const darkBlue = '#4b5969';
 
-    const [redOpacity, setRedOpacity] = useState(computeOpacity(regionNewCases, minNewCasesDate, maxNewCasesDate) || 0);
-    const [blackOpacity, setBlackOpacity] = useState(computeOpacity(regionNewCases, minNewCasesAllDates, maxNewCasesAllDates) || 0);
+    const [redOpacity, setRedOpacity] = useState(computeOpacity(regionNewCases, minNewCasesNow, maxNewCasesNow) || 0);
+    const [blackOpacity, setBlackOpacity] = useState(computeOpacity(regionNewCases, minNewCasesEver, maxNewCasesEver) || 0);
     const [popover, setPopover] = useState(false);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     useEffect(() => {
-        setRedOpacity(computeOpacity(regionNewCases, minNewCasesDate, maxNewCasesDate));
-        setBlackOpacity(computeOpacity(regionNewCases, minNewCasesAllDates, maxNewCasesAllDates));
-    }, [regionNewCases, minNewCasesDate, maxNewCasesDate, minNewCasesAllDates, maxNewCasesAllDates]);
+        setRedOpacity(computeOpacity(regionNewCases, minNewCasesNow, maxNewCasesNow));
+        setBlackOpacity(computeOpacity(regionNewCases, minNewCasesEver, maxNewCasesEver));
+    }, [regionNewCases, minNewCasesNow, maxNewCasesNow, minNewCasesEver, maxNewCasesEver]);
 
     const mouseEnter = (event) => {
         setAnchorEl(event.currentTarget);
@@ -89,7 +89,17 @@ const Region = ({ id, name, regionNewCases, minNewCasesDate, maxNewCasesDate, mi
                 </Typography>
                 <Typography>
                     Nouveaux cas: {regionNewCases}
-                </Typography></Popover>
+                </Typography>
+                <Typography>
+                    Anxiété: {mentalHealthNow?.anxiete || '?'}
+                </Typography>
+                <Typography>
+                    Dépression: {mentalHealthNow?.depression || '?'}
+                </Typography>
+                <Typography>
+                    Problèmes de sommeil: {mentalHealthNow?.pbsommeil || '?'}
+                </Typography>
+            </Popover>
         </>
     );
 };
@@ -99,18 +109,18 @@ Region.propTypes = {
     name: PropTypes.string.isRequired,
     path: PropTypes.string.isRequired,
     regionNewCases: PropTypes.number,
-    minNewCasesDate: PropTypes.number,
-    maxNewCasesDate: PropTypes.number,
-    minNewCasesAllDates: PropTypes.number,
-    maxNewCasesAllDates: PropTypes.number
+    minNewCasesNow: PropTypes.number,
+    maxNewCasesNow: PropTypes.number,
+    minNewCasesEver: PropTypes.number,
+    maxNewCasesEver: PropTypes.number
 };
 
 Region.defaultProps = {
     regionNewCases: 0,
-    minNewCasesDate: 0,
-    maxNewCasesDate: 0,
-    minNewCasesAllDates: 0,
-    maxNewCasesAllDates: 0
+    minNewCasesNow: 0,
+    maxNewCasesNow: 0,
+    minNewCasesEver: 0,
+    maxNewCasesEver: 0
 };
 
 export default Region;

@@ -3,87 +3,106 @@ import Map from "./Map/Map";
 import List from "./List/List";
 import DateSlider from "./DateSlider/DateSlider";
 import "./RegionsStats.css";
+import {computeDifferenceInDays} from "../Utils/time";
 
 const RegionsStats = () => {
-    const [regionsNewCases, setRegionsNewCases] = useState([]);
+    const [newCasesNow, setNewCasesNow] = useState([]);
+    const [mentalHealthNow, setMentalHealthNow] = useState([]);
     const [newCasesPerDay, setNewCasesPerDay] = useState([]);
+    const [mentalHealthPerDay, setMentalHealthPerDay] = useState([]);
     const [modeMap, setModeMap] = useState(true);
-    const [minNewCasesDate, setMinNewCasesDate] = useState(0);
-    const [maxNewCasesDate, setMaxNewCasesDate] = useState(0);
-    const [minNewCasesAllDates, setMinNewCasesAllDates] = useState(0);
-    const [maxNewCasesAllDates, setMaxNewCasesAllDates] = useState(0);
-    const [minDate, setMinDate] = useState(0);
-    const [maxDate, setMaxDate] = useState(0);
+    const [minNewCasesNow, setMinNewCasesNow] = useState(0);
+    const [maxNewCasesNow, setMaxNewCasesNow] = useState(0);
+    const [minNewCasesEver, setMinNewCasesEver] = useState(0);
+    const [maxNewCasesEver, setMaxNewCasesEver] = useState(0);
+    const [minDate, setMinDate] = useState(null);
+    const [maxDate, setMaxDate] = useState(null);
 
     useEffect(() => {
-        fetch('http://localhost:3001/nbcases/data/day')
-            .then(dataPerDayResult => dataPerDayResult.json())
-            .then(dataPerDayResult => dataPerDayResult.map(day => {
+        Promise.all([
+            fetch('http://localhost:3001/nbcases/data/day'),
+            fetch('http://localhost:3001/mentalHealth/data')
+        ]).then(async ([casesPerDay, mentalHealthPerDay]) => {
+            casesPerDay = await casesPerDay.json();
+            mentalHealthPerDay = await mentalHealthPerDay.json();
+
+            casesPerDay = casesPerDay.map(day => {
                 day.date = new Date(day.date);
                 return day;
-            }))
-            .then(dataPerDayResult => {
-                setMinMaxNewCasesAllDates(dataPerDayResult);
-                setMinMaxNewCasesDate(dataPerDayResult[0].regions);
-                setMinDate(dataPerDayResult[0].date);
-                setMaxDate(dataPerDayResult[dataPerDayResult.length-1].date);
-                setNewCasesPerDay(dataPerDayResult);
-                setRegionsNewCases(dataPerDayResult[0].regions)
             });
+            mentalHealthPerDay = mentalHealthPerDay.map(day => {
+                day.date = new Date(day.date);
+                for (const region of day.regions) {
+                    region.badMoodTotal = (+region.anxiete + +region.depression + +region.pbsommeil) / 3;
+                }
+                return day;
+            });
+
+            setMinMaxNewCasesEver(casesPerDay);
+            setMinMaxNewCasesNow(casesPerDay[0].regions);
+            setMinDate(casesPerDay[0].date);
+            setMaxDate(casesPerDay[casesPerDay.length-1].date);
+            setNewCasesPerDay(casesPerDay);
+            setNewCasesNow(casesPerDay[0].regions);
+
+            setMentalHealthPerDay(mentalHealthPerDay);
+            setMentalHealthNow(mentalHealthPerDay[6].regions);
+        });
     }, []);
 
-    const setMinMaxNewCasesAllDates = (dataPerDay) => {
+    const setMinMaxNewCasesEver = (dataPerDay) => {
         if (dataPerDay) {
-            let minNewCasesDateAllDates = Number.MAX_SAFE_INTEGER;
-            let maxNewCasesDateAllDates = 0;
+            let minNewCasesNowEver = Number.MAX_SAFE_INTEGER;
+            let maxNewCasesNowEver = 0;
             for (const day of dataPerDay) {
                 for (const region of day.regions) {
-                    if (region.newCases < minNewCasesDateAllDates) {
-                        minNewCasesDateAllDates = region.newCases;
+                    if (region.newCases < minNewCasesNowEver) {
+                        minNewCasesNowEver = region.newCases;
                     }
-                    if (region.newCases > maxNewCasesDateAllDates) {
-                        maxNewCasesDateAllDates = region.newCases;
+                    if (region.newCases > maxNewCasesNowEver) {
+                        maxNewCasesNowEver = region.newCases;
                     }
                 }
             }
-            setMinNewCasesAllDates(minNewCasesDateAllDates);
-            setMaxNewCasesAllDates(maxNewCasesDateAllDates);
+            setMinNewCasesEver(minNewCasesNowEver);
+            setMaxNewCasesEver(maxNewCasesNowEver);
         }
     }
 
-    const setMinMaxNewCasesDate = (regions) => {
+    const setMinMaxNewCasesNow = (regions) => {
         if (regions) {
-            let minNewCasesDate = Number.MAX_SAFE_INTEGER;
-            let maxNewCasesDate = 0;
+            let minNewCasesNow = Number.MAX_SAFE_INTEGER;
+            let maxNewCasesNow = 0;
             for (const region of regions) {
-                if (region.newCases < minNewCasesDate) {
-                    minNewCasesDate = region.newCases;
+                if (region.newCases < minNewCasesNow) {
+                    minNewCasesNow = region.newCases;
                 }
-                if (region.newCases > maxNewCasesDate) {
-                    maxNewCasesDate = region.newCases;
+                if (region.newCases > maxNewCasesNow) {
+                    maxNewCasesNow = region.newCases;
                 }
             }
-            setMinNewCasesDate(minNewCasesDate);
-            setMaxNewCasesDate(maxNewCasesDate);
+            setMinNewCasesNow(minNewCasesNow);
+            setMaxNewCasesNow(maxNewCasesNow);
         }
     }
 
     const onDateChange = (newDate) => {
         const regions = newCasesPerDay.find(date => date.date.getTime() === newDate.getTime())?.regions;
-        setMinMaxNewCasesDate(regions);
-        setRegionsNewCases(regions);
+        setMinMaxNewCasesNow(regions);
+        setNewCasesNow(regions);
     };
 
     const columns=["regionId", "newCases"];
     return (
         <div className="RegionsStats">
             <DateSlider minDate={minDate} maxDate={maxDate} onDateChange={onDateChange}/>
-            { !modeMap && <List columns={columns} regionsNewCasesData={regionsNewCases || []}/>}
-            { modeMap && <Map minNewCasesDate={minNewCasesDate}
-                              maxNewCasesDate={maxNewCasesDate}
-                              minNewCasesAllDates={minNewCasesAllDates}
-                              maxNewCasesAllDates={maxNewCasesAllDates}
-                              regionsNewCases={regionsNewCases || []}/>}
+            { !modeMap && <List columns={columns} newCasesNow={newCasesNow || []}/>}
+            { modeMap && <Map minNewCasesNow={minNewCasesNow}
+                              maxNewCasesNow={maxNewCasesNow}
+                              minNewCasesEver={minNewCasesEver}
+                              maxNewCasesEver={maxNewCasesEver}
+                              newCasesNow={newCasesNow || []}
+                              mentalHealthNow={mentalHealthNow || []}/>}
         </div>
     );
 };

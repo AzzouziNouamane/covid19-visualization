@@ -2,8 +2,7 @@ import React from "react";
 import { REGIONS } from "./regions";
 import Region from "./Region";
 
-const Map = ({ regionsNewCases, minNewCasesDate, maxNewCasesDate, minNewCasesAllDates, maxNewCasesAllDates }) => {
-
+const Map = ({ newCasesNow, minNewCasesNow, maxNewCasesNow, minNewCasesEver, maxNewCasesEver, mentalHealthNow }) => {
   return (
     <svg width="578px" height="544px" viewBox="0 0 578 544">
       <g id="carte" transform="translate(12.000000, 12.000000)">
@@ -14,11 +13,12 @@ const Map = ({ regionsNewCases, minNewCasesDate, maxNewCasesDate, minNewCasesAll
               key={region.id}
               path={region.path}
               name={region.name}
-              regionNewCases={regionsNewCases.find(r => region.id + "" === r.regionId)?.newCases}
-              minNewCasesDate={minNewCasesDate}
-              maxNewCasesDate={maxNewCasesDate}
-              minNewCasesAllDates={minNewCasesAllDates}
-              maxNewCasesAllDates={maxNewCasesAllDates}
+              regionNewCases={newCasesNow.find(r => region.id + "" === r.regionId)?.newCases}
+              minNewCasesNow={minNewCasesNow}
+              maxNewCasesNow={maxNewCasesNow}
+              minNewCasesEver={minNewCasesEver}
+              maxNewCasesEver={maxNewCasesEver}
+              mentalHealthNow={mentalHealthNow.find(r => region.id + "" === r.regionId)}
             >
             </Region>)
         }
@@ -28,7 +28,7 @@ const Map = ({ regionsNewCases, minNewCasesDate, maxNewCasesDate, minNewCasesAll
 };
 
 Map.defaultProps = {
-  regionsNewCasesData: []
+  newCasesNowData: []
 };
 
 export default Map;
