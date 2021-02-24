@@ -1,5 +1,5 @@
 import React from "react";
-import Cases from "./Cases/cases";
+import Cases from "./Cases/Cases";
 import Map from "./Map/Map"
 import "./App.css";
 import ThemeMode from "./ThemeMode/ThemeMode";
@@ -11,7 +11,7 @@ const App = () => {
   const [storageMode, setStorageMode] = UseLocalStorage('darkmode');
   const [theme, setTheme] = useState();
   const toggleTheme = () => {
-    if (theme === themes.dark) {
+    if (theme.name === 'dark') {
       setTheme(themes.light);
       setStorageMode(themes.light);
     }
@@ -23,7 +23,7 @@ const App = () => {
 
 	useEffect(() => {
 		setTheme(storageMode);
-	}, [storageMode]); 
+	}, [storageMode]);
 
 /* 	const changeThemeContext = useCallback((newTheme) => {
 		setTheme(newTheme);
