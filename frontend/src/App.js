@@ -1,6 +1,7 @@
 import React from "react";
-import Cases from "./Cases/Cases";
-import Map from "./Map/Map"
+import RegionsStats from "./RegionsStats/RegionsStats"
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import Authentication from './Authentication/Authentication';
 import "./App.css";
 import ThemeMode from "./ThemeMode/ThemeMode";
 import UseLocalStorage from "./Utils/LocalStorage/UseLocalStorage";
@@ -21,28 +22,21 @@ const App = () => {
     }
   }
 
-	useEffect(() => {
+    useEffect(() => {
 		setTheme(storageMode);
 	}, [storageMode]);
 
-/* 	const changeThemeContext = useCallback((newTheme) => {
-		setTheme(newTheme);
-		setStorageMode(newTheme);
-	}, [setStorageMode]);
-
-	useEffect(() => {
-		setTheme(storageMode);
-	}, [storageMode]); */
-
   return (
     <div className = "App" style = {storageMode}>
-    <ThemeContext.Provider value = {storageMode}>
-        <Map></Map>
-        <Cases></Cases>
+        <BrowserRouter>
+        <Switch>
+            <Route exact path='/authentication' render={ (props) => <ThemeContext.Provider value = {storageMode}> <Authentication {...props} /> </ThemeContext.Provider> } />
+            <Route exact path='/home' render={ (props) => <ThemeContext.Provider value = {storageMode}> <RegionsStats {...props} /> </ThemeContext.Provider> } />
+        </Switch>
+        </BrowserRouter>
         <ThemeMode
         onChange={toggleTheme}
         mode={storageMode}></ThemeMode>
-    </ThemeContext.Provider>
     </div>
 
   );
