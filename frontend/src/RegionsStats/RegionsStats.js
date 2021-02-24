@@ -3,7 +3,7 @@ import Map from "./Map/Map";
 import List from "./List/List";
 import DateSlider from "./DateSlider/DateSlider";
 import "./RegionsStats.css";
-import {computeDifferenceInDays} from "../Utils/time";
+import {computeDifferenceInDays, linear} from "../Utils/utils";
 
 const RegionsStats = () => {
     const [newCasesNow, setNewCasesNow] = useState([]);
@@ -86,10 +86,43 @@ const RegionsStats = () => {
         }
     }
 
+    const computeMentalHealthAtDate = (newDate) => {
+        const mentalHealth = mentalHealthPerDay.find(mentalHealth => mentalHealth.date.getTime() === newDate.getTime())?.regions || [];
+        if (mentalHealth.length === 0 && mentalHealthPerDay.length > 1) {
+            for (let i = 0; i < mentalHealthPerDay.length-1; i++) {
+                if (mentalHealthPerDay[i].date.getTime() < newDate && newDate < mentalHealthPerDay[i+1].date.getTime()) {
+                    const x = computeDifferenceInDays(mentalHealthPerDay[i].date, newDate);
+                    const diff = computeDifferenceInDays(mentalHealthPerDay[i].date, mentalHealthPerDay[i+1].date);
+                    for (let j = 0; j < mentalHealthPerDay[i].regions.length; j++) {
+                        if (mentalHealthPerDay[i+1].regions[j]) {
+                            const x1 = 0;
+                            const x2 = diff;
+                            const anxieteY1 = mentalHealthPerDay[i].regions[j].anxiete;
+                            const anxieteY2 = mentalHealthPerDay[i+1].regions[j].anxiete;
+                            const depressionY1 = mentalHealthPerDay[i].regions[j].depression;
+                            const depressionY2 = mentalHealthPerDay[i+1].regions[j].depression;
+                            const pbsommeilY1 = mentalHealthPerDay[i].regions[j].pbsommeil;
+                            const pbsommeilY2 = mentalHealthPerDay[i+1].regions[j].pbsommeil;
+                            mentalHealth.push({
+                                regionId: mentalHealthPerDay[i].regions[j].regionId,
+                                anxiete: linear(x1, anxieteY1, x2, anxieteY2, x).toFixed(0),
+                                depression: linear(x1, depressionY1, x2, depressionY2, x).toFixed(0),
+                                pbsommeil: linear(x1, pbsommeilY1, x2, pbsommeilY2, x).toFixed(0),
+                            })
+                        }
+                    }
+                }
+            }
+        }
+        return mentalHealth;
+    }
+
     const onDateChange = (newDate) => {
         const regions = newCasesPerDay.find(date => date.date.getTime() === newDate.getTime())?.regions;
         setMinMaxNewCasesNow(regions);
         setNewCasesNow(regions);
+
+        setMentalHealthNow(computeMentalHealthAtDate(newDate));
     };
 
     const columns=["regionId", "newCases"];

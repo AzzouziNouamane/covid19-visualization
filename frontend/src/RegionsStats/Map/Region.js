@@ -4,6 +4,7 @@ import Popover from '@material-ui/core/Popover';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from "@material-ui/core";
 import ThemeContext from "../../Context/Theme/ThemeContext";
+import {linear} from "../../Utils/utils";
 
 const useStyles = makeStyles((theme) => ({
     popover: {
@@ -14,13 +15,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const computeOpacity = (regionNewCases, minNewCases, maxNewCases) => {
-    if (minNewCases === 0 && maxNewCases === 0) {
-        return 0;
-    }
-    return ((1 - 0.05) / (maxNewCases - minNewCases)) * regionNewCases + (1 - ((1 - 0.05) / (maxNewCases - minNewCases)) * maxNewCases);
-}
-
 const Region = ({ id, name, regionNewCases, minNewCasesNow, maxNewCasesNow, minNewCasesEver, maxNewCasesEver, path, mentalHealthNow }) => {
     const classes = useStyles();
 
@@ -29,15 +23,15 @@ const Region = ({ id, name, regionNewCases, minNewCasesNow, maxNewCasesNow, minN
     const red = '#eb0e0e';
     const darkBlue = '#4b5969';
 
-    const [redOpacity, setRedOpacity] = useState(computeOpacity(regionNewCases, minNewCasesNow, maxNewCasesNow) || 0);
-    const [blackOpacity, setBlackOpacity] = useState(computeOpacity(regionNewCases, minNewCasesEver, maxNewCasesEver) || 0);
+    const [redOpacity, setRedOpacity] = useState(linear(minNewCasesNow, 0.05, maxNewCasesNow, 1, regionNewCases) || 0);
+    const [blackOpacity, setBlackOpacity] = useState(linear(minNewCasesNow, 0.05, maxNewCasesNow, 1, regionNewCases) || 0);
     const [popover, setPopover] = useState(false);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     useEffect(() => {
-        setRedOpacity(computeOpacity(regionNewCases, minNewCasesNow, maxNewCasesNow));
-        setBlackOpacity(computeOpacity(regionNewCases, minNewCasesEver, maxNewCasesEver));
+        setRedOpacity(linear(minNewCasesNow, 0.05, maxNewCasesNow, 1, regionNewCases));
+        setBlackOpacity(linear(minNewCasesEver, 0.05, maxNewCasesEver, 1, regionNewCases));
     }, [regionNewCases, minNewCasesNow, maxNewCasesNow, minNewCasesEver, maxNewCasesEver]);
 
     const mouseEnter = (event) => {
