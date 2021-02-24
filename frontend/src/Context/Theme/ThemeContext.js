@@ -2,13 +2,13 @@ import React from 'react';
 
 export const themes = {
     dark: {
-        name:  'dark',
+        isDark:  true,
         color:  'white',
         background: 'black'
     },
 
     light: {
-        name:  'light',
+        isDark:  false,
         color: 'black',
         background: 'white'
     }

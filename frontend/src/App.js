@@ -12,7 +12,7 @@ const App = () => {
   const [storageMode, setStorageMode] = UseLocalStorage('darkmode');
   const [theme, setTheme] = useState();
   const toggleTheme = () => {
-    if (theme.name === 'dark') {
+    if (theme.isDark) {
       setTheme(themes.light);
       setStorageMode(themes.light);
     }
@@ -27,16 +27,14 @@ const App = () => {
 	}, [storageMode]);
 
   return (
-    <div className = "App" style = {storageMode}>
+    <div className="App" style={storageMode}>
         <BrowserRouter>
         <Switch>
             <Route exact path='/authentication' render={ (props) => <ThemeContext.Provider value = {storageMode}> <Authentication {...props} /> </ThemeContext.Provider> } />
             <Route exact path='/home' render={ (props) => <ThemeContext.Provider value = {storageMode}> <RegionsStats {...props} /> </ThemeContext.Provider> } />
         </Switch>
         </BrowserRouter>
-        <ThemeMode
-        onChange={toggleTheme}
-        mode={storageMode}></ThemeMode>
+        <ThemeMode onChange={toggleTheme} mode={storageMode}/>
     </div>
 
   );

@@ -4,7 +4,6 @@ import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'react-toggle/style.css';
 import './ThemeMode.scss';
-import {themes} from "../Context/Theme/ThemeContext";
 
 
 const ThemeMode = ({ mode, onChange }) => {
@@ -20,7 +19,7 @@ const ThemeMode = ({ mode, onChange }) => {
 					<FontAwesomeIcon icon={faMoon} className="fa faMoon" />
 				),
 			}}
-			defaultChecked={mode.name === 'light'}
+			defaultChecked={!mode.isDark}
 			onChange={onChange}
 		/>
 	</div>

@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { makeStyles, Slider, Tooltip, Typography } from "@material-ui/core";
 import moment from "moment";
 import PropTypes from "prop-types";
+import ThemeContext from "../../Context/Theme/ThemeContext";
 
 const useStyles = makeStyles((theme) => ({
     slider: {
-        width: 300,
-        marginLeft: 100
+        width: 400,
+        marginBottom: 10
     }
 }));
 
@@ -24,6 +25,8 @@ const DateSlider = ({onDateChange}) => {
     const [maxSliderValue, setMaxSliderValue] = useState(2);
     const [selectedDate, setSelectedDate] = useState(null);
     const classes = useStyles();
+
+    const theme = useContext(ThemeContext);
 
     useEffect(() => {
         simulateFetchFirstLastDates(432).then(resultDates => {
@@ -52,10 +55,11 @@ const DateSlider = ({onDateChange}) => {
 
     return (
         <div className={classes.slider}>
-                <Typography gutterBottom>
-                    Choix de la date
+                <Typography align='center'>
+                    Date
                 </Typography>
                 <Slider
+                    color={ theme.isDark ? 'secondary': 'primary' }
                     min={0}
                     max={maxSliderValue}
                     defaultValue={0}
