@@ -1,21 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import { REGIONS } from "./regions";
 import Region from "./Region";
 
-const computeOpacities = (regionsNewCases, minNewCases, maxNewCases) => {
-  return regionsNewCases.map(region => {
-    region.opacity = ((1 - 0.2) / (maxNewCases - minNewCases)) * region.newCases + (1 - ((1 - 0.2) / (maxNewCases - minNewCases)) * maxNewCases);
-    return region;
-  });
-}
-
-const Map = ({ regionsNewCasesData, minNewCases, maxNewCases }) => {
-
-  const [regionsNewCases, setRegionsNewCases] = useState([]);
-
-  useEffect(() => {
-    setRegionsNewCases(computeOpacities(regionsNewCasesData, minNewCases, maxNewCases));
-  }, [regionsNewCasesData, minNewCases, maxNewCases]);
+const Map = ({ regionsNewCases, minNewCasesDate, maxNewCasesDate, minNewCasesAllDates, maxNewCasesAllDates }) => {
 
   return (
     <svg width="578px" height="544px" viewBox="0 0 578 544">
@@ -23,12 +10,16 @@ const Map = ({ regionsNewCasesData, minNewCases, maxNewCases }) => {
         {
           REGIONS.map(region =>
             <Region
-              redOpacity={regionsNewCases.find(r => region.id + "" === r.regionId)?.opacity}
               id={region.id}
               key={region.id}
               path={region.path}
               name={region.name}
-              newCases={regionsNewCases.find(r => region.id + "" === r.regionId)?.newCases}>
+              regionNewCases={regionsNewCases.find(r => region.id + "" === r.regionId)?.newCases}
+              minNewCasesDate={minNewCasesDate}
+              maxNewCasesDate={maxNewCasesDate}
+              minNewCasesAllDates={minNewCasesAllDates}
+              maxNewCasesAllDates={maxNewCasesAllDates}
+            >
             </Region>)
         }
       </g>

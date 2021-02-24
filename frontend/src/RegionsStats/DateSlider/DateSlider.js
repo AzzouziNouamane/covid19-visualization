@@ -58,7 +58,6 @@ const DateSlider = ({onDateChange, minDate, maxDate}) => {
                     min={0}
                     max={maxSliderValue}
                     defaultValue={0}
-                    step={1}
                     onChange={dateChanged}
                     valueLabelFormat={sliderLabelFormat}
                     ValueLabelComponent={({ children, open, value }) => {

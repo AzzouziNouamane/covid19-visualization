@@ -8,8 +8,10 @@ const RegionsStats = () => {
     const [regionsNewCases, setRegionsNewCases] = useState([]);
     const [newCasesPerDay, setNewCasesPerDay] = useState([]);
     const [modeMap, setModeMap] = useState(true);
-    const [minNewCases, setMinNewCases] = useState(0);
-    const [maxNewCases, setMaxNewCases] = useState(0);
+    const [minNewCasesDate, setMinNewCasesDate] = useState(0);
+    const [maxNewCasesDate, setMaxNewCasesDate] = useState(0);
+    const [minNewCasesAllDates, setMinNewCasesAllDates] = useState(0);
+    const [maxNewCasesAllDates, setMaxNewCasesAllDates] = useState(0);
     const [minDate, setMinDate] = useState(0);
     const [maxDate, setMaxDate] = useState(0);
 
@@ -21,7 +23,8 @@ const RegionsStats = () => {
                 return day;
             }))
             .then(dataPerDayResult => {
-                setMinMaxNewCases(dataPerDayResult[0].regions);
+                setMinMaxNewCasesAllDates(dataPerDayResult);
+                setMinMaxNewCasesDate(dataPerDayResult[0].regions);
                 setMinDate(dataPerDayResult[0].date);
                 setMaxDate(dataPerDayResult[dataPerDayResult.length-1].date);
                 setNewCasesPerDay(dataPerDayResult);
@@ -29,26 +32,46 @@ const RegionsStats = () => {
             });
     }, []);
 
-    const setMinMaxNewCases = (regions) => {
-        if (regions) {
-            let minNewCases = Number.MAX_SAFE_INTEGER;
-            let maxNewCases = 0;
-            for (const region of regions) {
-                if (region.newCases < minNewCases) {
-                    minNewCases = region.newCases;
-                }
-                if (region.newCases > maxNewCases) {
-                    maxNewCases = region.newCases;
+    const setMinMaxNewCasesAllDates = (dataPerDay) => {
+        if (dataPerDay) {
+            let minNewCasesDateAllDates = Number.MAX_SAFE_INTEGER;
+            let maxNewCasesDateAllDates = 0;
+            for (const day of dataPerDay) {
+                for (const region of day.regions) {
+                    if (region.newCases < minNewCasesDateAllDates) {
+                        minNewCasesDateAllDates = region.newCases;
+                    }
+                    if (region.newCases > maxNewCasesDateAllDates) {
+                        maxNewCasesDateAllDates = region.newCases;
+                    }
                 }
             }
-            setMinNewCases(minNewCases);
-            setMaxNewCases(maxNewCases);
+            setMinNewCasesAllDates(minNewCasesDateAllDates);
+            setMaxNewCasesAllDates(maxNewCasesDateAllDates);
+        }
+    }
+
+    const setMinMaxNewCasesDate = (regions) => {
+        if (regions) {
+            let minNewCasesDate = Number.MAX_SAFE_INTEGER;
+            let maxNewCasesDate = 0;
+            for (const region of regions) {
+                if (region.newCases < minNewCasesDate) {
+                    minNewCasesDate = region.newCases;
+                }
+                if (region.newCases > maxNewCasesDate) {
+                    maxNewCasesDate = region.newCases;
+                }
+            }
+            setMinNewCasesDate(minNewCasesDate);
+            setMaxNewCasesDate(maxNewCasesDate);
         }
     }
 
     const onDateChange = (newDate) => {
-        setMinMaxNewCases(newCasesPerDay.find(date => date.date.getTime() === newDate.getTime())?.regions);
-        setRegionsNewCases(newCasesPerDay.find(date => date.date.getTime() === newDate.getTime())?.regions);
+        const regions = newCasesPerDay.find(date => date.date.getTime() === newDate.getTime())?.regions;
+        setMinMaxNewCasesDate(regions);
+        setRegionsNewCases(regions);
     };
 
     const columns=["regionId", "newCases"];
@@ -56,7 +79,11 @@ const RegionsStats = () => {
         <div className="RegionsStats">
             <DateSlider minDate={minDate} maxDate={maxDate} onDateChange={onDateChange}/>
             { !modeMap && <List columns={columns} regionsNewCasesData={regionsNewCases || []}/>}
-            { modeMap && <Map minNewCases={minNewCases} maxNewCases={maxNewCases} regionsNewCasesData={regionsNewCases || []}/>}
+            { modeMap && <Map minNewCasesDate={minNewCasesDate}
+                              maxNewCasesDate={maxNewCasesDate}
+                              minNewCasesAllDates={minNewCasesAllDates}
+                              maxNewCasesAllDates={maxNewCasesAllDates}
+                              regionsNewCases={regionsNewCases || []}/>}
         </div>
     );
 };
