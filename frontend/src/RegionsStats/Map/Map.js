@@ -1,7 +1,6 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import { REGIONS } from "./regions";
 import Region from "./Region";
-import ThemeContext from "../../Context/Theme/ThemeContext";
 
 const computeOpacities = (regionsNewCases, minNewCases, maxNewCases) => {
   return regionsNewCases.map(region => {
@@ -10,22 +9,9 @@ const computeOpacities = (regionsNewCases, minNewCases, maxNewCases) => {
   });
 }
 
-function simulateMinMaxNewCasesFetch(ms) {
-  return new Promise(resolve => setTimeout(() => resolve({ minNewCases: 108, maxNewCases: 543 }), ms));
-}
-
-const Map = ({ regionsNewCasesData }) => {
+const Map = ({ regionsNewCasesData, minNewCases, maxNewCases }) => {
 
   const [regionsNewCases, setRegionsNewCases] = useState([]);
-  const [minNewCases, setMinNewCases] = useState(0);
-  const [maxNewCases, setMaxNewCases] = useState(0);
-
-  useEffect(() => {
-    simulateMinMaxNewCasesFetch(500).then(result => {
-      setMinNewCases(result.minNewCases);
-      setMaxNewCases(result.maxNewCases);
-    });
-  }, []);
 
   useEffect(() => {
     setRegionsNewCases(computeOpacities(regionsNewCasesData, minNewCases, maxNewCases));
@@ -37,12 +23,12 @@ const Map = ({ regionsNewCasesData }) => {
         {
           REGIONS.map(region =>
             <Region
-              redOpacity={regionsNewCases.find(r => region.id === r.regionId)?.opacity}
+              redOpacity={regionsNewCases.find(r => region.id + "" === r.regionId)?.opacity}
               id={region.id}
               key={region.id}
               path={region.path}
               name={region.name}
-              newCases={regionsNewCases.find(r => region.id === r.regionId)?.newCases}>
+              newCases={regionsNewCases.find(r => region.id + "" === r.regionId)?.newCases}>
             </Region>)
         }
       </g>

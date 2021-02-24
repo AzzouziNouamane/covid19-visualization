@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import { makeStyles, Slider, Tooltip, Typography } from "@material-ui/core";
-import moment from "moment";
+import moment from 'moment-timezone';
 import PropTypes from "prop-types";
 import ThemeContext from "../../Context/Theme/ThemeContext";
 
@@ -11,15 +11,11 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function simulateFetchFirstLastDates(ms) {
-    return new Promise(resolve => setTimeout(() => resolve({ firstDatasetDate: new Date(2020, 3, 22), lastDatasetDate: new Date(2020, 3, 24) }), ms));
-}
-
 function computeDifferenceInDays(date1, date2) {
     return (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24);
 }
 
-const DateSlider = ({onDateChange}) => {
+const DateSlider = ({onDateChange, minDate, maxDate}) => {
     const [firstDatasetDate, setFirstDatasetDate] = useState(null);
     const [currentSliderValue, setCurrentSliderValue] = useState(0);
     const [maxSliderValue, setMaxSliderValue] = useState(2);
@@ -29,14 +25,13 @@ const DateSlider = ({onDateChange}) => {
     const theme = useContext(ThemeContext);
 
     useEffect(() => {
-        simulateFetchFirstLastDates(432).then(resultDates => {
-            setFirstDatasetDate(resultDates.firstDatasetDate);
-            setMaxSliderValue(computeDifferenceInDays(resultDates.firstDatasetDate, resultDates.lastDatasetDate));
-            setSelectedDate(resultDates.firstDatasetDate);
-
-            onDateChange(resultDates.firstDatasetDate);
-        });
-    }, []);
+        if (minDate && maxDate) {
+            setFirstDatasetDate(minDate);
+            setMaxSliderValue(computeDifferenceInDays(minDate, maxDate));
+            setSelectedDate(minDate);
+            onDateChange(minDate);
+        }
+    }, [minDate, maxDate]);
 
     const dateChanged = (event, newValue) => {
         if (newValue !== currentSliderValue) {

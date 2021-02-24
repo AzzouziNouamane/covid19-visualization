@@ -52,9 +52,7 @@ router.get('/data/month', (req, res) => {
 
 router.get('/data/day', (req, res) => {
     try {
-        let day_date = new Date(req.body.date);
-        console.log(day_date);
-        CasesPerDay.find({date : day_date}, function(err, cases) {
+        CasesPerDay.find({}, function(err, cases) {
             res.json(cases);
         });
     }catch (e) {
