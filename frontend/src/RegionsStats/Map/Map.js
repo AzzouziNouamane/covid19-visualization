@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { REGIONS } from "./regions";
 import Region from "./Region";
+import ThemeContext from "../../Context/Theme/ThemeContext";
 
 const computeOpacities = (regionsNewCases, minNewCases, maxNewCases) => {
   return regionsNewCases.map(region => {
@@ -37,6 +38,7 @@ const Map = ({ regionsNewCasesData }) => {
           REGIONS.map(region =>
             <Region
               redOpacity={regionsNewCases.find(r => region.id === r.regionId)?.opacity}
+              id={region.id}
               key={region.id}
               path={region.path}
               name={region.name}
