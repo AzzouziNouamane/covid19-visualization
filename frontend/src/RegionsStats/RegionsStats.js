@@ -8,13 +8,15 @@ import Toggle from "react-toggle";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faGlobeEurope, faList} from "@fortawesome/free-solid-svg-icons";
 import {REGIONS} from "./Map/regions";
+import UseLocalStorage from "../Utils/LocalStorage/UseLocalStorage";
 
 const RegionsStats = () => {
+    const [modeMapStorage, setModeMapStorage] = UseLocalStorage('modeMap');
     const [newCasesNow, setNewCasesNow] = useState([]);
     const [mentalHealthNow, setMentalHealthNow] = useState([]);
     const [newCasesPerDay, setNewCasesPerDay] = useState([]);
     const [mentalHealthPerDay, setMentalHealthPerDay] = useState([]);
-    const [modeMap, setModeMap] = useState(true);
+    const [modeMap, setModeMap] = useState(modeMapStorage);
     const [minNewCasesNow, setMinNewCasesNow] = useState(0);
     const [maxNewCasesNow, setMaxNewCasesNow] = useState(0);
     const [minNewCasesEver, setMinNewCasesEver] = useState(0);
@@ -56,6 +58,10 @@ const RegionsStats = () => {
             setMentalHealthNow(computeMentalHealthAtDate(casesPerDay[0].date, mentalHealthPerDay))
         });
     }, []);
+
+    useEffect(() => {
+        setModeMap(modeMapStorage);
+    }, [modeMapStorage]);
 
     const setMinMaxNewCasesEver = (dataPerDay) => {
         if (dataPerDay) {
@@ -133,7 +139,9 @@ const RegionsStats = () => {
     };
 
     const onModeMapChange = () => {
-        setModeMap(!modeMap);
+        const newModeMap = !modeMap;
+        setModeMap(newModeMap)
+        setModeMapStorage(newModeMap);
     };
 
     const columns=["regionId", "newCases"];
@@ -160,6 +168,7 @@ const RegionsStats = () => {
                         ),
                     }}
                     onChange={onModeMapChange}
+                    defaultChecked={!modeMap}
                 />
             </div>
         </div>
