@@ -79,7 +79,7 @@ const Region = ({
         <>
             <path
                 d={path}
-                stroke={ theme.background }
+                stroke="black"
                 fill={"url(#layers" + id + ")"}
                 onMouseEnter={mouseEnter}
                 onMouseLeave={mouseLeave}>
