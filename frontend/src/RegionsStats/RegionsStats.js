@@ -140,16 +140,16 @@ const RegionsStats = () => {
 
     const onModeMapChange = () => {
         const newModeMap = !modeMap;
-        setModeMap(newModeMap)
+        setModeMap(newModeMap);
         setModeMapStorage(newModeMap);
     };
 
-    const columns=["regionId", "newCases"];
+    const columns=["regionId","region", "newCases","anxiete","depression","pbsommeil"];
     return (
         <div className="RegionsStats">
             <div id="display">
                 <DateSlider minDate={minDate} maxDate={maxDate} onDateChange={onDateChange}/>
-                { !modeMap && <List columns={columns} newCasesNow={newCasesNow || []}/>}
+                { !modeMap && <List columns={columns} newCasesNow={newCasesNow || []} mentalHealthNow={mentalHealthNow || []}/>}
                 { modeMap && <Map minNewCasesNow={minNewCasesNow}
                                   maxNewCasesNow={maxNewCasesNow}
                                   minNewCasesEver={minNewCasesEver}

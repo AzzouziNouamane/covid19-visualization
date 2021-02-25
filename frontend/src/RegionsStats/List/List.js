@@ -1,10 +1,11 @@
 import { Table } from "reactstrap";
 import PropTypes from "prop-types";
 import React from "react";
+import { REGIONS } from "./regions";
 import './List.css';
 
 
-export const List = ({ columns, newCasesNow }) => (
+export const List = ({ columns, newCasesNow, mentalHealthNow }) => (
     <Table bordered hover striped id="customers">
         <thead>
         <tr>
@@ -14,15 +15,31 @@ export const List = ({ columns, newCasesNow }) => (
         </tr>
         </thead>
         <tbody>
-        {newCasesNow.map((d) => (
-            <tr key={d.id}>
-                {columns.map((col) => (
-                    <td key={col + d.id} style={{ verticalAlign: "middle" }}>
-                        {d[col]}
-                    </td>
-                ))}
+        {REGIONS.map(region =>
+            <tr key={region.id}>
+
+                <td style={{ verticalAlign: "middle" }}>
+                    {region.id}
+                </td>
+                <td style={{ verticalAlign: "middle" }}>
+                    {region.name}
+                </td>
+                <td style={{ verticalAlign: "middle" }}>
+                    {newCasesNow.find(r => region.id + "" === r.regionId)?.newCases}
+                </td>
+                <td style={{ verticalAlign: "middle" }}>
+                    {mentalHealthNow.find(r => region.id + "" === r.regionId)?.anxiete}
+                </td>
+                <td style={{ verticalAlign: "middle" }}>
+                    {mentalHealthNow.find(r => region.id + "" === r.regionId)?.depression}
+                </td>
+                <td style={{ verticalAlign: "middle" }}>
+                    {mentalHealthNow.find(r => region.id + "" === r.regionId)?.pbsommeil}
+                </td>
+
             </tr>
-        ))}
+
+        )}
         </tbody>
     </Table>
 );
