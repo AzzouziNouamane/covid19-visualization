@@ -4,8 +4,9 @@ import Popover from '@material-ui/core/Popover';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from "@material-ui/core";
 import { REGIONS } from "./regions"
-import {linear} from "../../Utils/utils";
+import {linear} from "../../../Utils/utils";
 import {useHistory} from "react-router-dom";
+import "./Region.scss";
 
 const useStyles = makeStyles((theme) => ({
     popover: {
@@ -27,6 +28,7 @@ const setSmileyInactive = (smileyHtml) => {
 
 const Region = ({
                     id,
+                    isUserRegion,
                     name,
                     regionNewCases,
                     minNewCasesNow,
@@ -93,6 +95,7 @@ const Region = ({
                 <rect fill={red} opacity={redOpacity} x="0" y="0" width="5" height="5"/>
                 <rect fill="black" opacity={blackOpacity} x="0" y="0" width="5" height="5"/>
                 <rect fill={darkBlue} opacity={popover ? "1" : "0"} x="0" y="0" width="5" height="5"/>
+                { isUserRegion && <rect className="user-region" fill={darkBlue} x="0" y="0" width="5" height="5"/> }
             </pattern>
             <Popover
                 id="mouse-over-popover"
@@ -114,7 +117,7 @@ const Region = ({
                 disableRestoreFocus
             >
                 <Typography align='center'>
-                    <strong>{name}</strong>
+                    <strong>{name} { isUserRegion && "(votre région)"}</strong>
                 </Typography>
                 <Typography>
                     Nouveaux cas: {regionNewCases}

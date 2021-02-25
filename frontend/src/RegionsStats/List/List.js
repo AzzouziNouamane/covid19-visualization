@@ -1,11 +1,13 @@
 import { Table } from "reactstrap";
 import PropTypes from "prop-types";
 import React from "react";
+import './List.scss';
+import {useHistory} from "react-router-dom";
 import { REGIONS } from "./regions";
-import './List.css';
 
 
-export const List = ({ columns, newCasesNow, mentalHealthNow }) => (
+export const List = ({ userRegionId, columns, newCasesNow, mentalHealthNow }) => {
+    let history = useHistory();
     <Table bordered hover striped id="customers">
         <thead>
         <tr>
@@ -38,6 +40,24 @@ export const List = ({ columns, newCasesNow, mentalHealthNow }) => (
                 </td>
 
             </tr>
+            </thead>
+            <tbody>
+            {newCasesNow.map((d) => (
+                    <tr key={d.regionId}
+                        className={+userRegionId === +d.regionId ? "user-region" : ""}
+                        onClick={() => history.push("/graph/" + d.regionId)}
+                        style={{cursor: "pointer"}}>
+                        {
+                            columns.map((col) => (
+                            <td key={col + d.regionId} style={{verticalAlign: "middle"}}>
+                                {d[col]} {+userRegionId === +d.regionId && col === "regionId" && "(votre région)"}
+                            </td>
+                        ))}
+                </tr>
+            ))}
+            </tbody>
+        </Table>
+    );
 
         )}
         </tbody>
