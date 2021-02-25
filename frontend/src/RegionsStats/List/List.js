@@ -2,15 +2,13 @@ import { Table } from "reactstrap";
 import PropTypes from "prop-types";
 import React from "react";
 import './List.css';
-import {REGIONS} from "../Map/regions";
+import {useHistory} from "react-router-dom";
 
 
-export const List = ({ columns, newCasesNow }) =>{
-    const navigate = (regionId)=>{
-        window.location.href = "http://localhost:3000/graph/"+ regionId
-    };
+export const List = ({ columns, newCasesNow }) => {
+    let history = useHistory();
+
     return  (
-
         <Table bordered hover striped id="customers">
             <thead>
             <tr>
@@ -21,7 +19,9 @@ export const List = ({ columns, newCasesNow }) =>{
             </thead>
             <tbody>
             {newCasesNow.map((d) => (
-                <tr key={d.id} onClick={()=>navigate(d.regionId)}>
+                <tr key={d.id}
+                    onClick={() => history.push("/graph/" + d.regionId)}
+                    style={{cursor: "pointer"}}>
                     {columns.map((col) => (
                         <td key={col + d.id} style={{ verticalAlign: "middle" }}>
                             {d[col]}

@@ -30,7 +30,7 @@ const Authentication = (props) => {
                         </div>
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
-                            <Field type="password" name="password" className={"form-control"} placeholder="Password" id="psw" />
+                            <Field type="password" name="password" className={"form-control"} placeholder="Mot de passe" id="psw" />
                             { touched.password && errors.password && <span className="help-block text-danger">{errors.password}</span> }
                         </div>
                         <button className="button" type="submit" >Login</button>
@@ -51,8 +51,8 @@ const LoginFormik = withFormik({
         }
     },
     validationSchema: Yup.object().shape({
-        email: Yup.string().email('Email not valid').required('Email is required'),
-        password: Yup.string().required('Password is required')
+        email: Yup.string().email('Email invalide').required('Email requis'),
+        password: Yup.string().required('Mot de passe requis')
     }),
 
     handleSubmit: (props) => {
@@ -62,7 +62,7 @@ const LoginFormik = withFormik({
             window.location.href = "http://localhost:3000/home"
             }
 
-        else {alert('Wrong Email or Password try it again ')}
+        else {alert('Email ou mot de passe erroné. Veuillez réessayer. ')}
 
     },
 

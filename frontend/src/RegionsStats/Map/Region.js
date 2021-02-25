@@ -1,11 +1,11 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import Popover from '@material-ui/core/Popover';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from "@material-ui/core";
 import { REGIONS } from "./regions"
-import ThemeContext from "../../Context/Theme/ThemeContext";
 import {linear} from "../../Utils/utils";
+import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     popover: {
@@ -40,8 +40,7 @@ const Region = ({
                     maxMentalHealthEver
 }) => {
     const classes = useStyles();
-
-    const theme = useContext(ThemeContext);
+    let history = useHistory();
 
     const red = '#eb0e0e';
     const darkBlue = '#4b5969';
@@ -74,22 +73,18 @@ const Region = ({
         setAnchorEl(null);
         setPopover(false);
     };
-    const navigate = ()=>{
-        let reg = REGIONS.find(element => element.name === name);
-        console.log(reg);
-        window.location.href = "http://localhost:3000/graph/"+ reg.id
-    };
 
     const open = Boolean(anchorEl);
     return (
         <>
             <path
+                style={{cursor: "pointer"}}
                 d={path}
                 stroke="black"
                 fill={"url(#layers" + id + ")"}
                 onMouseEnter={mouseEnter}
                 onMouseLeave={mouseLeave}
-                onClick={navigate}
+                onClick={() => history.push("/graph/" + REGIONS.find(element => element.name === name)?.id)}
             >
             </path>
             <svg style={{pointerEvents: "none"}} fill="none" dangerouslySetInnerHTML={{ __html: smileyHtml }} />
