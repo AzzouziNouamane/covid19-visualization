@@ -19,7 +19,7 @@ const ThemeMode = ({ mode, onChange }) => {
 					<FontAwesomeIcon icon={faMoon} className="fa faMoon" />
 				),
 			}}
-			defaultChecked={!mode?.isDark}
+			checked={!mode.isDark}
 			onChange={onChange}
 		/>
 	</div>
