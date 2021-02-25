@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import ThemeContext, { themes } from "./Context/Theme/ThemeContext";
 import Graph from "./Graph/Graph";
 import Cases from "./Cases/Cases";
+import {ToastContainer} from "react-toastify";
 
 const App = () => {
   const [storageMode, setStorageMode] = UseLocalStorage('darkmode');
@@ -47,7 +48,18 @@ const App = () => {
              </Switch>
         </BrowserRouter>
         <ThemeMode onChange={toggleTheme} mode={theme}/>
-        <Cases />
+        <Cases/>
+        <ToastContainer
+            position="bottom-left"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+        />
     </div>
 
   );

@@ -3,12 +3,14 @@ import Map from "./Map/Map";
 import List from "./List/List";
 import DateSlider from "./DateSlider/DateSlider";
 import "./RegionsStats.scss";
-import {computeDifferenceInDays, linear} from "../Utils/utils";
+import {apiUrl, computeDifferenceInDays, linear} from "../Utils/utils";
 import Toggle from "react-toggle";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faGlobeEurope, faList} from "@fortawesome/free-solid-svg-icons";
 import {REGIONS} from "./Map/regions";
 import UseLocalStorage from "../Utils/LocalStorage/UseLocalStorage";
+import 'react-toastify/dist/ReactToastify.css';
+import {dataLoadingError} from "../Utils/utils";
 
 const RegionsStats = () => {
     const [modeMapStorage, setModeMapStorage] = UseLocalStorage('modeMap');
@@ -28,8 +30,8 @@ const RegionsStats = () => {
 
     useEffect(() => {
         Promise.all([
-            fetch('http://localhost:3001/nbcases/data/day'),
-            fetch('http://localhost:3001/mentalHealth/data')
+            fetch(apiUrl + 'nbcases/data/day'),
+            fetch(apiUrl + 'mentalHealth/data')
         ]).then(async ([casesPerDay, mentalHealthPerDay]) => {
             casesPerDay = await casesPerDay.json();
             mentalHealthPerDay = await mentalHealthPerDay.json();
@@ -59,6 +61,8 @@ const RegionsStats = () => {
             setMinMaxMentalHealthEver(mentalHealthPerDay);
             setMentalHealthPerDay(mentalHealthPerDay);
             setMentalHealthNow(computeMentalHealthAtDate(casesPerDay[0].date, mentalHealthPerDay))
+        }).catch(() => {
+            dataLoadingError();
         });
     }, []);
 
@@ -196,7 +200,6 @@ const RegionsStats = () => {
                     defaultChecked={!modeMap}
                 />
             </div>
-
         </div>
     );
 };
