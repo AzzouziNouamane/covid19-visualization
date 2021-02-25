@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { REGIONS } from "./regions";
 import Region from "./Region";
-import {Route, Link, BrowserRouter, Switch, Redirect} from "react-router-dom";
-import Graph from "../../Graph/graph";
-import Button from "@material-ui/core/Button";
+import ThemeContext from "../../Context/Theme/ThemeContext";
 
 const computeOpacities = (regionsNewCases, minNewCases, maxNewCases) => {
   return regionsNewCases.map(region => {
@@ -33,37 +31,23 @@ const Map = ({ regionsNewCasesData }) => {
     setRegionsNewCases(computeOpacities(regionsNewCasesData, minNewCases, maxNewCases));
   }, [regionsNewCasesData, minNewCases, maxNewCases]);
 
-
   return (
-      <BrowserRouter>
-        <div>
-
-        <svg width="578px" height="544px" viewBox="0 0 578 544">
-          <g id="carte" transform="translate(12.000000, 12.000000)">
-            {
-              REGIONS.map(region =>
-                    <Region
-                        redOpacity={regionsNewCases.find(r => region.id === r.regionId)?.opacity}
-                        key={region.id}
-                        path={region.path}
-                        name={region.name}
-                        newCases={regionsNewCases.find(r => region.id === r.regionId)?.newCases}>
-
-                    </Region>
-
-                  )
-            }
-          </g>
-        </svg>
-          <Switch>
-            <Route exact path='/graph/:regionId' component={Graph}/>
-          </Switch>
-      </div>
-      </BrowserRouter>
-
+    <svg width="578px" height="544px" viewBox="0 0 578 544">
+      <g id="carte" transform="translate(12.000000, 12.000000)">
+        {
+          REGIONS.map(region =>
+            <Region
+              redOpacity={regionsNewCases.find(r => region.id === r.regionId)?.opacity}
+              id={region.id}
+              key={region.id}
+              path={region.path}
+              name={region.name}
+              newCases={regionsNewCases.find(r => region.id === r.regionId)?.newCases}>
+            </Region>)
+        }
+      </g>
+    </svg>
   );
-
-
 };
 
 Map.defaultProps = {

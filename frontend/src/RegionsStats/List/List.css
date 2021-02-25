@@ -1,7 +1,9 @@
 #customers {
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
-    width: 100%;
+    width: 600px;
+    background-color: white;
+    color: black !important;
 }
 
 #customers td, #customers th {
