@@ -11,17 +11,17 @@ const Charto = ({data}) => {
             loader={<div>Chargement</div>}
             data={data}
             options={{
-                legendTextStyle: { color: theme.isDark ?  "#fff" :"black"},
-                titleTextStyle: { color: theme.isDark ?  "#fff" :"black"},
-                backgroundColor : theme.isDark ? "black": "#fff",
+                legendTextStyle: { color: theme.color},
+                titleTextStyle: { color: theme.color},
+                backgroundColor: theme.background,
                 hAxis: {
-                    textStyle:{color : theme.isDark ? "#fff" :"black"},
-                    titleTextStyle: { color: theme.isDark ?  "#fff" :"black"},
+                    textStyle:{ color: theme.color },
+                    titleTextStyle: { color: theme.color},
                     title: 'Mois',
                 },
                 vAxis: {
-                    titleTextStyle: { color: theme.isDark ?  "#fff" :"black"},
-                    textStyle:{color : theme.isDark ? "#fff" : "black"},
+                    titleTextStyle: { color: theme.color},
+                    textStyle:{ color: theme.color },
                     title: 'Nombre de personnes',
                 },
             }}
