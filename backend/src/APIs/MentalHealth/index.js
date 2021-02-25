@@ -14,6 +14,7 @@ router.post('/parse', (req, res) => {
     }
 });
 
+
 router.get('/data', (req, res) => {
         let result = [];
         let dates = ['Vague 1 : 23-25 mars'];
@@ -60,11 +61,33 @@ router.get('/data', (req, res) => {
     }
 });
 
+router.get('/data/month/:id', async (req, res) => {
+    let mcases = await MentalHealth.find({"region": req.params.id});
+    let months = ["jan", "feb", "mars", "avr", "mai", "juin", "juillet", "août", "sept", "oct", "nov", "dec"];
+    let result_m = [];
+    mcases.forEach( elt => {
+        let month = elt.periode.split(" ").pop().split(".")[0] ;
+        let month_index = months.indexOf(month)+1;
+        if (result_m[month_index] === undefined){
+            result_m[month_index] = parseInt(elt.anxiete) + parseInt(elt.depression) + parseInt(elt.pbsommeil);
+        } else {
+            result_m[month_index] += parseInt(elt.anxiete) + parseInt(elt.depression) + parseInt(elt.pbsommeil);
+        }
+    });
+    let result = [];
+    result_m.forEach(elt =>{
+        let data = [2020, result_m.indexOf(elt), elt];
+        result.push(data);
+    });
+    return res.json(result);
+
+});
+
 function formatDate(period) {
 
     let s = period.split("-");
     let date = s[1].split(" ");
-    console.log(date[0])
+    console.log(date[0]);
     return new Date(2020,months[date[1]]-1,parseInt(date[0])+1);
 
 }

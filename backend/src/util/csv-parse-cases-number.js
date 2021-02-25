@@ -139,7 +139,9 @@ const CasesParsePerDay = async () => {
                 }
 
             }
-            let minmax= new MinMax( {min : min, max : max});
+            let startDate = results[0].jour;
+            let endDate = results[results.length-1].jour ;
+            let minmax= new MinMax( {min : min, max : max, startDate:startDate, endDate:endDate});
             await minmax.save();
 
         });

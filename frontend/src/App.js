@@ -7,6 +7,9 @@ import ThemeMode from "./ThemeMode/ThemeMode";
 import UseLocalStorage from "./Utils/LocalStorage/UseLocalStorage";
 import { useState, useEffect } from 'react';
 import ThemeContext, { themes } from "./Context/Theme/ThemeContext";
+import Graph from "./Graph/Graph";
+import Cases from "./Cases/Cases";
+import {ToastContainer} from "react-toastify";
 
 const App = () => {
   const [storageMode, setStorageMode] = UseLocalStorage('darkmode');
@@ -41,9 +44,22 @@ const App = () => {
             </Route>
             <Route exact path='/authentication' render={ (props) => <ThemeContext.Provider value={theme}> <Authentication {...props} /> </ThemeContext.Provider> } />
             <Route exact path='/home' render={ (props) => <ThemeContext.Provider value={theme}> <RegionsStats {...props} /> </ThemeContext.Provider> } />
-        </Switch>
+            <Route exact path='/graph/:regionId' render={ (props) => <ThemeContext.Provider value={theme}> <Graph {...props} /> </ThemeContext.Provider> }/>
+             </Switch>
         </BrowserRouter>
         <ThemeMode onChange={toggleTheme} mode={theme}/>
+        <Cases/>
+        <ToastContainer
+            position="bottom-left"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+        />
     </div>
 
   );
