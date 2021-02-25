@@ -7,7 +7,7 @@ import {apiUrl, computeDifferenceInDays, linear} from "../Utils/utils";
 import Toggle from "react-toggle";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faGlobeEurope, faList} from "@fortawesome/free-solid-svg-icons";
-import {REGIONS} from "./Map/regions";
+import {REGIONS} from "./Map/Region/regions";
 import UseLocalStorage from "../Utils/LocalStorage/UseLocalStorage";
 import 'react-toastify/dist/ReactToastify.css';
 import {dataLoadingError} from "../Utils/utils";
