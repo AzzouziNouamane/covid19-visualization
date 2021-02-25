@@ -89,9 +89,9 @@ const RegionsStats = () => {
         if (mentalHealthPerDay) {
             let minMentalHealthEver = Number.MAX_SAFE_INTEGER;
             let maxMentalHealthEver = 0;
-            for (const day of mentalHealthPerDay) {
-                for (const region of day.regions) {
-                    const regionMentalHealth = (+region.anxiete + +region.depression + +region.pbsommeil) / 3;
+            for (let i = 5; i < mentalHealthPerDay.length; i++) {
+                for (const region of mentalHealthPerDay[i].regions) {
+                    const regionMentalHealth = (+region.anxiete + +region.depression) / 2;
                     if (regionMentalHealth < minMentalHealthEver) {
                         minMentalHealthEver = regionMentalHealth;
                     }

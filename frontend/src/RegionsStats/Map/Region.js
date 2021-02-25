@@ -19,6 +19,11 @@ const changeSmileyMood = (smileyHtml, moodNumber) => {
     return smileyHtml?.replaceAll(smileyHtml?.split('<')[4]?.split(' ')[3], Number(smileyHtml?.split('<')[4]?.split(' ')[3])+moodNumber) || '';
 }
 
+const setSmileyInactive = (smileyHtml) => {
+    smileyHtml = smileyHtml?.replaceAll('#F9FC81', 'lightgray');
+    return smileyHtml?.replaceAll('<' + smileyHtml?.split('<')[4], '');
+}
+
 const Region = ({
                     id,
                     name,
@@ -53,8 +58,10 @@ const Region = ({
     }, [regionNewCases, minNewCasesNow, maxNewCasesNow, minNewCasesEver, maxNewCasesEver]);
 
     useEffect(() => {
-        if (mentalHealthNow?.anxiete && mentalHealthNow?.depression && mentalHealthNow?.pbsommeil) {
-            setSmileyHtml(changeSmileyMood(smiley, linear(minMentalHealthEver, 20, maxMentalHealthEver, -10, (+mentalHealthNow?.anxiete + +mentalHealthNow?.depression + +mentalHealthNow?.pbsommeil) / 3)));
+        if (mentalHealthNow?.anxiete) {
+            setSmileyHtml(changeSmileyMood(smiley, linear(minMentalHealthEver, 5, maxMentalHealthEver, -15, (+mentalHealthNow?.anxiete + +mentalHealthNow?.depression) / 2)));
+        } else {
+            setSmileyHtml(setSmileyInactive(smiley));
         }
     }, [smiley, mentalHealthNow, minMentalHealthEver, maxMentalHealthEver]);
 
@@ -77,7 +84,7 @@ const Region = ({
                 onMouseEnter={mouseEnter}
                 onMouseLeave={mouseLeave}>
             </path>
-            <svg fill="none" dangerouslySetInnerHTML={{ __html: smileyHtml }} />
+            <svg style={{pointerEvents: "none"}} fill="none" dangerouslySetInnerHTML={{ __html: smileyHtml }} />
             <pattern id={"layers" + id} width="5" height="5" patternUnits="userSpaceOnUse">
                 <rect fill="white" x="0" y="0" width="5" height="5"/>
                 <rect fill={red} opacity={redOpacity} x="0" y="0" width="5" height="5"/>
