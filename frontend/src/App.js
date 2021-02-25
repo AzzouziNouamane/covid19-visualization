@@ -34,8 +34,8 @@ const App = () => {
             <Route exact path="/">
                 <Redirect to="/home" />
             </Route>
-            <Route exact path='/authentication' render={ (props) => <ThemeContext.Provider value = {storageMode}> <Authentication {...props} /> </ThemeContext.Provider> } />
-            <Route exact path='/home' render={ (props) => <ThemeContext.Provider value = {storageMode}> <RegionsStats {...props} /> </ThemeContext.Provider> } />
+            <Route exact path='/authentication' render={ (props) => <ThemeContext.Provider value={theme}> <Authentication {...props} /> </ThemeContext.Provider> } />
+            <Route exact path='/home' render={ (props) => <ThemeContext.Provider value={theme}> <RegionsStats {...props} /> </ThemeContext.Provider> } />
         </Switch>
         </BrowserRouter>
         <ThemeMode onChange={toggleTheme} mode={theme}/>
