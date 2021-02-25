@@ -16,7 +16,29 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Region = ({ id, name, regionNewCases, minNewCasesNow, maxNewCasesNow, minNewCasesEver, maxNewCasesEver, path, mentalHealthNow }) => {
+const changeSmileyMood = (smileyHtml, moodNumber) => {
+    return smileyHtml?.replaceAll(smileyHtml?.split('<')[4]?.split(' ')[3], Number(smileyHtml?.split('<')[4]?.split(' ')[3])+moodNumber) || '';
+}
+
+const setSmileyInactive = (smileyHtml) => {
+    smileyHtml = smileyHtml?.replaceAll('#F9FC81', 'lightgray');
+    return smileyHtml?.replaceAll('<' + smileyHtml?.split('<')[4], '');
+}
+
+const Region = ({
+                    id,
+                    name,
+                    regionNewCases,
+                    minNewCasesNow,
+                    maxNewCasesNow,
+                    minNewCasesEver,
+                    maxNewCasesEver,
+                    path,
+                    smiley,
+                    mentalHealthNow,
+                    minMentalHealthEver,
+                    maxMentalHealthEver
+}) => {
     const classes = useStyles();
 
     const theme = useContext(ThemeContext);
@@ -27,6 +49,7 @@ const Region = ({ id, name, regionNewCases, minNewCasesNow, maxNewCasesNow, minN
     const [redOpacity, setRedOpacity] = useState(linear(minNewCasesNow, 0.05, maxNewCasesNow, 1, regionNewCases) || 0);
     const [blackOpacity, setBlackOpacity] = useState(linear(minNewCasesNow, 0.05, maxNewCasesNow, 1, regionNewCases) || 0);
     const [popover, setPopover] = useState(false);
+    const [smileyHtml, setSmileyHtml] = useState(changeSmileyMood(smiley, -10));
 
     const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -34,6 +57,14 @@ const Region = ({ id, name, regionNewCases, minNewCasesNow, maxNewCasesNow, minN
         setRedOpacity(linear(minNewCasesNow, 0.05, maxNewCasesNow, 1, regionNewCases));
         setBlackOpacity(linear(minNewCasesEver, 0.05, maxNewCasesEver, 1, regionNewCases));
     }, [regionNewCases, minNewCasesNow, maxNewCasesNow, minNewCasesEver, maxNewCasesEver]);
+
+    useEffect(() => {
+        if (mentalHealthNow?.anxiete) {
+            setSmileyHtml(changeSmileyMood(smiley, linear(minMentalHealthEver, 5, maxMentalHealthEver, -15, (+mentalHealthNow?.anxiete + +mentalHealthNow?.depression) / 2)));
+        } else {
+            setSmileyHtml(setSmileyInactive(smiley));
+        }
+    }, [smiley, mentalHealthNow, minMentalHealthEver, maxMentalHealthEver]);
 
     const mouseEnter = (event) => {
         setAnchorEl(event.currentTarget);
@@ -54,13 +85,14 @@ const Region = ({ id, name, regionNewCases, minNewCasesNow, maxNewCasesNow, minN
         <>
             <path
                 d={path}
-                stroke={ theme.background }
+                stroke="black"
                 fill={"url(#layers" + id + ")"}
                 onMouseEnter={mouseEnter}
                 onMouseLeave={mouseLeave}
                 onClick={navigate}
             >
             </path>
+            <svg style={{pointerEvents: "none"}} fill="none" dangerouslySetInnerHTML={{ __html: smileyHtml }} />
             <pattern id={"layers" + id} width="5" height="5" patternUnits="userSpaceOnUse">
                 <rect fill="white" x="0" y="0" width="5" height="5"/>
                 <rect fill={red} opacity={redOpacity} x="0" y="0" width="5" height="5"/>
@@ -92,24 +124,15 @@ const Region = ({ id, name, regionNewCases, minNewCasesNow, maxNewCasesNow, minN
                 <Typography>
                     Nouveaux cas: {regionNewCases}
                 </Typography>
-                {
-                    mentalHealthNow?.anxiete &&
-                    <Typography>
-                        Anxiété: {mentalHealthNow?.anxiete}
-                    </Typography>
-                }
-                {
-                    mentalHealthNow?.depression &&
-                    <Typography>
-                        Dépression: {mentalHealthNow?.depression}
-                    </Typography>
-                }
-                {
-                    mentalHealthNow?.pbsommeil &&
-                    <Typography>
-                        Problèmes de sommeil: {mentalHealthNow?.pbsommeil}
-                    </Typography>
-                }
+                <Typography>
+                    Anxiété: {mentalHealthNow?.anxiete || '?'}
+                </Typography>
+                <Typography>
+                    Dépression: {mentalHealthNow?.depression || '?'}
+                </Typography>
+                <Typography>
+                    Problèmes de sommeil: {mentalHealthNow?.pbsommeil || '?'}
+                </Typography>
             </Popover>
         </>
     );
