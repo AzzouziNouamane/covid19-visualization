@@ -7,6 +7,7 @@ import ThemeMode from "./ThemeMode/ThemeMode";
 import UseLocalStorage from "./Utils/LocalStorage/UseLocalStorage";
 import { useState, useEffect } from 'react';
 import ThemeContext, { themes } from "./Context/Theme/ThemeContext";
+import Graph from "./Graph/graph";
 
 const App = () => {
   const [storageMode, setStorageMode] = UseLocalStorage('darkmode');
@@ -31,6 +32,7 @@ const App = () => {
     <div className="App" style={storageMode}>
         <BrowserRouter>
         <Switch>
+            <Route exact path={'/graph/:regionId'}render={ (props) => <ThemeContext.Provider value = {storageMode}> <Graph {...props} /> </ThemeContext.Provider> }/>
             <Route exact path='/authentication' render={ (props) => <ThemeContext.Provider value = {storageMode}> <Authentication {...props} /> </ThemeContext.Provider> } />
             <Route exact path='/home' render={ (props) => <ThemeContext.Provider value = {storageMode}> <RegionsStats {...props} /> </ThemeContext.Provider> } />
         </Switch>
