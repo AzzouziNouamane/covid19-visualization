@@ -24,20 +24,16 @@ const App = () => {
   }
 
     useEffect(() => {
-      console.log('window.matchMedia');
-      console.log(window.matchMedia('(prefers-color-scheme: light)').matches)
-      if(window.matchMedia('(prefers-color-scheme: light)').matches) {
+      if (window.matchMedia('(prefers-color-scheme: light)').matches) {
         setTheme(storageMode || themes.light);
       }
-
       else {
         setTheme(storageMode || themes.dark);
       }
-        
     }, [storageMode]);
 
   return (
-    <div className="App" style={storageMode}>
+    <div className="App" style={theme}>
         <BrowserRouter>
         <Switch>
             <Route exact path="/">
