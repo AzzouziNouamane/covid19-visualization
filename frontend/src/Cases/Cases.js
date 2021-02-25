@@ -2,24 +2,12 @@ import React, { useState, useEffect } from "react";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import liveDot from "../assets/live.png";
 import "./Cases.scss"
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-const apiUrl = "http://localhost:3001/";
+import {apiUrl, notify} from "../Utils/utils";
 
 const Cases = () => {
   const [cases, setCases] = useState({});
   const [loading, setLoading] = useState(true);
-
-  const notify = () => toast.error('Désolé, une erreur est survenue ! Merci de réessayer ultérieurement.', {
-    position: "bottom-left",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-  });
 
   const fetchData = async () => {
     const response = await fetch(apiUrl + "cases/liveData");
@@ -64,18 +52,6 @@ const Cases = () => {
               </div>
             </div>
         )}
-
-        <ToastContainer
-            position="bottom-left"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-        />
       </div>
   );
 };

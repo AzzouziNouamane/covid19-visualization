@@ -3,24 +3,14 @@ import Map from "./Map/Map";
 import List from "./List/List";
 import DateSlider from "./DateSlider/DateSlider";
 import "./RegionsStats.scss";
-import {computeDifferenceInDays, linear} from "../Utils/utils";
+import {apiUrl, computeDifferenceInDays, linear} from "../Utils/utils";
 import Toggle from "react-toggle";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faGlobeEurope, faList} from "@fortawesome/free-solid-svg-icons";
 import {REGIONS} from "./Map/regions";
 import UseLocalStorage from "../Utils/LocalStorage/UseLocalStorage";
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-const notify = () => toast.error('Désolé, une erreur est survenue ! Merci de réessayer ultérieurement.', {
-    position: "bottom-left",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    });
+import {notify} from "../Utils/utils";
 
 const RegionsStats = () => {
     const [modeMapStorage, setModeMapStorage] = UseLocalStorage('modeMap');
@@ -40,8 +30,8 @@ const RegionsStats = () => {
 
     useEffect(() => {
         Promise.all([
-            fetch('http://localhost:3001/nbcases/data/day'),
-            fetch('http://localhost:3001/mentalHealth/data')
+            fetch(apiUrl + 'nbcases/data/day'),
+            fetch(apiUrl + 'mentalHealth/data')
         ]).then(async ([casesPerDay, mentalHealthPerDay]) => {
             casesPerDay = await casesPerDay.json();
             mentalHealthPerDay = await mentalHealthPerDay.json();
@@ -71,9 +61,9 @@ const RegionsStats = () => {
             setMinMaxMentalHealthEver(mentalHealthPerDay);
             setMentalHealthPerDay(mentalHealthPerDay);
             setMentalHealthNow(computeMentalHealthAtDate(casesPerDay[0].date, mentalHealthPerDay))
-        }).catch(err => {
+        }).catch(() => {
             notify();
-          });;
+        });
     }, []);
 
     useEffect(() => {
@@ -210,18 +200,6 @@ const RegionsStats = () => {
                     defaultChecked={!modeMap}
                 />
             </div>
-
-            <ToastContainer
-              position="bottom-left"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-            />
         </div>
     );
 };

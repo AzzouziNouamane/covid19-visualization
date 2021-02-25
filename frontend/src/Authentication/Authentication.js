@@ -57,12 +57,12 @@ const LoginFormik = withFormik({
 
     handleSubmit: (props) => {
         //const {history} = props;
-        if(props.email === "admin@polytech.com" && props.password === "admin" )
-        {alert('SUCCESS Login');
+        if(props.email === "admin@polytech.com" && props.password === "admin" ) {
+            alert('SUCCESS Login');
             window.location.href = "http://localhost:3000/home"
-            }
-
-        else {alert('Email ou mot de passe erroné. Veuillez réessayer. ')}
+        } else {
+            alert('Email ou mot de passe erroné. Veuillez réessayer. ')
+        }
 
     },
 
