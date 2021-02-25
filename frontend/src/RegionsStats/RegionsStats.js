@@ -12,6 +12,23 @@ import UseLocalStorage from "../Utils/LocalStorage/UseLocalStorage";
 import 'react-toastify/dist/ReactToastify.css';
 import {dataLoadingError} from "../Utils/utils";
 
+const getUserRegionId = async (lat, lon) => {
+    let regionId;
+    try {
+        let depRes = await fetch(`https://api-adresse.data.gouv.fr/reverse/?lon=${lon}&lat=${lat}`);
+        depRes = await depRes.json();
+        const depCode = depRes.features[0]?.properties?.context?.split(',')[0]
+
+        let regRes = await fetch(`https://geo.api.gouv.fr/departements/${depCode}`);
+        regRes = await regRes.json();
+        regionId = +regRes.codeRegion
+    } catch (e) {
+        dataLoadingError();
+    }
+
+    return regionId;
+}
+
 const RegionsStats = () => {
     const [modeMapStorage, setModeMapStorage] = UseLocalStorage('modeMap');
     const [newCasesNow, setNewCasesNow] = useState([]);
@@ -27,6 +44,13 @@ const RegionsStats = () => {
     const [maxMentalHealthEver, setMaxMentalHealthEver] = useState(0);
     const [minDate, setMinDate] = useState(null);
     const [maxDate, setMaxDate] = useState(null);
+    const [userRegionId, setUserRegionId] = useState(null);
+
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition(async (position) => {
+            setUserRegionId(await getUserRegionId(position.coords.latitude, position.coords.longitude));
+        })
+    }, [])
 
     useEffect(() => {
         Promise.all([
@@ -176,8 +200,9 @@ const RegionsStats = () => {
         <div className="RegionsStats">
             <div id="display">
                 <DateSlider minDate={minDate} maxDate={maxDate} onDateChange={onDateChange}/>
-                { !modeMap && <List columns={columns} newCasesNow={newCasesNow || []}/>}
-                { modeMap && <Map minNewCasesNow={minNewCasesNow}
+                { !modeMap && <List userRegionId={userRegionId} columns={columns} newCasesNow={newCasesNow || []}/>}
+                { modeMap && <Map userRegionId={userRegionId}
+                                  minNewCasesNow={minNewCasesNow}
                                   maxNewCasesNow={maxNewCasesNow}
                                   minNewCasesEver={minNewCasesEver}
                                   maxNewCasesEver={maxNewCasesEver}
