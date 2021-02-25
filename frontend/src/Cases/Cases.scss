@@ -1,0 +1,44 @@
+.Cases {
+    .liveDot {
+        width: 30px;
+        height: 30px;
+        margin-right: 0.5em;
+    }
+    
+    .totalCases {
+        font-size: 3em;
+        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+        font-weight: 400;
+        line-height: 1;
+        letter-spacing: 0.01071em;
+        margin-top: 1em;
+    }
+    
+    .cardRoot {
+        width: 70%;
+    }
+    
+    .title {
+        display: flex;
+        place-content: center;
+        align-items: center;
+        margin-top: 1.5em;
+    }
+    
+    h1 {
+        margin: 0;
+    }
+    
+    .lastUpdated {
+        margin-top: 0.5em;
+        color: gray;
+    }
+    
+    .stats {
+        font-size: 28px;
+    }
+    
+    .loadingCases {
+        margin-top: 1.5em;
+    }
+}
