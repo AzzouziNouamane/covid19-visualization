@@ -116,24 +116,15 @@ const Region = ({
                 <Typography>
                     Nouveaux cas: {regionNewCases}
                 </Typography>
-                {
-                    mentalHealthNow?.anxiete &&
-                    <Typography>
-                        Anxiété: {mentalHealthNow?.anxiete}
-                    </Typography>
-                }
-                {
-                    mentalHealthNow?.depression &&
-                    <Typography>
-                        Dépression: {mentalHealthNow?.depression}
-                    </Typography>
-                }
-                {
-                    mentalHealthNow?.pbsommeil &&
-                    <Typography>
-                        Problèmes de sommeil: {mentalHealthNow?.pbsommeil}
-                    </Typography>
-                }
+                <Typography>
+                    Anxiété: {mentalHealthNow?.anxiete || '?'}
+                </Typography>
+                <Typography>
+                    Dépression: {mentalHealthNow?.depression || '?'}
+                </Typography>
+                <Typography>
+                    Problèmes de sommeil: {mentalHealthNow?.pbsommeil || '?'}
+                </Typography>
             </Popover>
         </>
     );
