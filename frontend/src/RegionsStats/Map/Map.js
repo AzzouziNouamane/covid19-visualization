@@ -1,7 +1,6 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import { REGIONS } from "./regions";
 import Region from "./Region";
-import ThemeContext from "../../Context/Theme/ThemeContext";
 
 const computeOpacities = (regionsNewCases, minNewCases, maxNewCases) => {
   return regionsNewCases.map(region => {
