@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Popover from '@material-ui/core/Popover';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from "@material-ui/core";
+import { REGIONS } from "./regions"
 import ThemeContext from "../../Context/Theme/ThemeContext";
 import {linear} from "../../Utils/utils";
 
@@ -37,11 +38,16 @@ const Region = ({ id, name, regionNewCases, minNewCasesNow, maxNewCasesNow, minN
     const mouseEnter = (event) => {
         setAnchorEl(event.currentTarget);
         setPopover(true);
-    }
+    };
     const mouseLeave = () => {
         setAnchorEl(null);
         setPopover(false);
-    }
+    };
+    const navigate = ()=>{
+        let reg = REGIONS.find(element => element.name === name);
+        console.log(reg);
+        window.location.href = "http://localhost:3000/graph/"+ reg.id
+    };
 
     const open = Boolean(anchorEl);
     return (
@@ -51,7 +57,9 @@ const Region = ({ id, name, regionNewCases, minNewCasesNow, maxNewCasesNow, minN
                 stroke={ theme.background }
                 fill={"url(#layers" + id + ")"}
                 onMouseEnter={mouseEnter}
-                onMouseLeave={mouseLeave}>
+                onMouseLeave={mouseLeave}
+                onClick={navigate}
+            >
             </path>
             <pattern id={"layers" + id} width="5" height="5" patternUnits="userSpaceOnUse">
                 <rect fill="white" x="0" y="0" width="5" height="5"/>
