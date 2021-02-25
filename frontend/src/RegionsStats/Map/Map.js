@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { REGIONS } from "./regions";
 import Region from "./Region";
 

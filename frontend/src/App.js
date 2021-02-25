@@ -10,7 +10,8 @@ import ThemeContext, { themes } from "./Context/Theme/ThemeContext";
 
 const App = () => {
   const [storageMode, setStorageMode] = UseLocalStorage('darkmode');
-  const [theme, setTheme] = useState();
+  const [theme, setTheme] = useState(themes.light);
+
   const toggleTheme = () => {
     if (theme.isDark) {
       setTheme(themes.light);
@@ -23,8 +24,8 @@ const App = () => {
   }
 
     useEffect(() => {
-		setTheme(storageMode);
-	}, [storageMode]);
+        setTheme(storageMode || themes.light);
+    }, [storageMode]);
 
   return (
     <div className="App" style={storageMode}>
@@ -37,7 +38,7 @@ const App = () => {
             <Route exact path='/home' render={ (props) => <ThemeContext.Provider value = {storageMode}> <RegionsStats {...props} /> </ThemeContext.Provider> } />
         </Switch>
         </BrowserRouter>
-        <ThemeMode onChange={toggleTheme} mode={storageMode}/>
+        <ThemeMode onChange={toggleTheme} mode={theme}/>
     </div>
 
   );
