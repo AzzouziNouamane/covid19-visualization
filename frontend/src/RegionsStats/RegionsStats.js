@@ -3,12 +3,14 @@ import Map from "./Map/Map";
 import List from "./List/List";
 import DateSlider from "./DateSlider/DateSlider";
 import "./RegionsStats.scss";
-import {computeDifferenceInDays, linear} from "../Utils/utils";
+import {apiUrl, computeDifferenceInDays, linear} from "../Utils/utils";
 import Toggle from "react-toggle";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faGlobeEurope, faList} from "@fortawesome/free-solid-svg-icons";
 import {REGIONS} from "./Map/regions";
 import UseLocalStorage from "../Utils/LocalStorage/UseLocalStorage";
+import 'react-toastify/dist/ReactToastify.css';
+import {dataLoadingError} from "../Utils/utils";
 
 const RegionsStats = () => {
     const [modeMapStorage, setModeMapStorage] = UseLocalStorage('modeMap');
@@ -21,13 +23,15 @@ const RegionsStats = () => {
     const [maxNewCasesNow, setMaxNewCasesNow] = useState(0);
     const [minNewCasesEver, setMinNewCasesEver] = useState(0);
     const [maxNewCasesEver, setMaxNewCasesEver] = useState(0);
+    const [minMentalHealthEver, setMinMentalHealthEver] = useState(0);
+    const [maxMentalHealthEver, setMaxMentalHealthEver] = useState(0);
     const [minDate, setMinDate] = useState(null);
     const [maxDate, setMaxDate] = useState(null);
 
     useEffect(() => {
         Promise.all([
-            fetch('http://localhost:3001/nbcases/data/day'),
-            fetch('http://localhost:3001/mentalHealth/data')
+            fetch(apiUrl + 'nbcases/data/day'),
+            fetch(apiUrl + 'mentalHealth/data')
         ]).then(async ([casesPerDay, mentalHealthPerDay]) => {
             casesPerDay = await casesPerDay.json();
             mentalHealthPerDay = await mentalHealthPerDay.json();
@@ -54,8 +58,11 @@ const RegionsStats = () => {
             setNewCasesPerDay(casesPerDay);
             setNewCasesNow(casesPerDay[0].regions);
 
+            setMinMaxMentalHealthEver(mentalHealthPerDay);
             setMentalHealthPerDay(mentalHealthPerDay);
             setMentalHealthNow(computeMentalHealthAtDate(casesPerDay[0].date, mentalHealthPerDay))
+        }).catch(() => {
+            dataLoadingError();
         });
     }, []);
 
@@ -79,6 +86,26 @@ const RegionsStats = () => {
             }
             setMinNewCasesEver(minNewCasesNowEver);
             setMaxNewCasesEver(maxNewCasesNowEver);
+        }
+    }
+
+    const setMinMaxMentalHealthEver = (mentalHealthPerDay) => {
+        if (mentalHealthPerDay) {
+            let minMentalHealthEver = Number.MAX_SAFE_INTEGER;
+            let maxMentalHealthEver = 0;
+            for (let i = 5; i < mentalHealthPerDay.length; i++) {
+                for (const region of mentalHealthPerDay[i].regions) {
+                    const regionMentalHealth = (+region.anxiete + +region.depression) / 2;
+                    if (regionMentalHealth < minMentalHealthEver) {
+                        minMentalHealthEver = regionMentalHealth;
+                    }
+                    if (regionMentalHealth > maxMentalHealthEver) {
+                        maxMentalHealthEver = regionMentalHealth;
+                    }
+                }
+            }
+            setMinMentalHealthEver(minMentalHealthEver);
+            setMaxMentalHealthEver(maxMentalHealthEver);
         }
     }
 
@@ -155,7 +182,9 @@ const RegionsStats = () => {
                                   minNewCasesEver={minNewCasesEver}
                                   maxNewCasesEver={maxNewCasesEver}
                                   newCasesNow={newCasesNow || []}
-                                  mentalHealthNow={mentalHealthNow || []}/>}
+                                  mentalHealthNow={mentalHealthNow || []}
+                                  minMentalHealthEver={minMentalHealthEver}
+                                  maxMentalHealthEver={maxMentalHealthEver}/>}
             </div>
             <div id="mapMode">
                 <Toggle
