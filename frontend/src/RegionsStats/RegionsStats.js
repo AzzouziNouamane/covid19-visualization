@@ -21,6 +21,8 @@ const RegionsStats = () => {
     const [maxNewCasesNow, setMaxNewCasesNow] = useState(0);
     const [minNewCasesEver, setMinNewCasesEver] = useState(0);
     const [maxNewCasesEver, setMaxNewCasesEver] = useState(0);
+    const [minMentalHealthEver, setMinMentalHealthEver] = useState(0);
+    const [maxMentalHealthEver, setMaxMentalHealthEver] = useState(0);
     const [minDate, setMinDate] = useState(null);
     const [maxDate, setMaxDate] = useState(null);
 
@@ -54,6 +56,7 @@ const RegionsStats = () => {
             setNewCasesPerDay(casesPerDay);
             setNewCasesNow(casesPerDay[0].regions);
 
+            setMinMaxMentalHealthEver(mentalHealthPerDay);
             setMentalHealthPerDay(mentalHealthPerDay);
             setMentalHealthNow(computeMentalHealthAtDate(casesPerDay[0].date, mentalHealthPerDay))
         });
@@ -79,6 +82,26 @@ const RegionsStats = () => {
             }
             setMinNewCasesEver(minNewCasesNowEver);
             setMaxNewCasesEver(maxNewCasesNowEver);
+        }
+    }
+
+    const setMinMaxMentalHealthEver = (mentalHealthPerDay) => {
+        if (mentalHealthPerDay) {
+            let minMentalHealthEver = Number.MAX_SAFE_INTEGER;
+            let maxMentalHealthEver = 0;
+            for (const day of mentalHealthPerDay) {
+                for (const region of day.regions) {
+                    const regionMentalHealth = (+region.anxiete + +region.depression + +region.pbsommeil) / 3;
+                    if (regionMentalHealth < minMentalHealthEver) {
+                        minMentalHealthEver = regionMentalHealth;
+                    }
+                    if (regionMentalHealth > maxMentalHealthEver) {
+                        maxMentalHealthEver = regionMentalHealth;
+                    }
+                }
+            }
+            setMinMentalHealthEver(minMentalHealthEver);
+            setMaxMentalHealthEver(maxMentalHealthEver);
         }
     }
 
@@ -155,7 +178,9 @@ const RegionsStats = () => {
                                   minNewCasesEver={minNewCasesEver}
                                   maxNewCasesEver={maxNewCasesEver}
                                   newCasesNow={newCasesNow || []}
-                                  mentalHealthNow={mentalHealthNow || []}/>}
+                                  mentalHealthNow={mentalHealthNow || []}
+                                  minMentalHealthEver={minMentalHealthEver}
+                                  maxMentalHealthEver={maxMentalHealthEver}/>}
             </div>
             <div id="mapMode">
                 <Toggle
