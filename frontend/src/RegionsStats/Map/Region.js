@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import PropTypes, {element} from "prop-types";
 import Popover from '@material-ui/core/Popover';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from "@material-ui/core";
-
+import {BrowserRouter, Route, Switch} from "react-router-dom";
+import Graph from "../../Graph/graph";
+import { REGIONS } from "./regions"
 const useStyles = makeStyles((theme) => ({
     popover: {
         pointerEvents: 'none',
@@ -13,20 +15,20 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Region = ({ name, redOpacity, path, newCases }) => {
+const Region = ({  name, redOpacity, path, newCases,key }) => {
     const classes = useStyles();
-
     const red = '#eb0e0e';
     const blue = '#b6d2f0';
     const darkBlue = '#4b5969';
 
     const [color, setColor] = useState(redOpacity ? red : blue);
+    const[id, setId] = useState(key);
     const [opacity, setOpacity] = useState(redOpacity || 1);
-
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     useEffect(() => {
         setColor(redOpacity ? red : blue);
+        setId(key);
         setOpacity(redOpacity || 1);
     }, [redOpacity]);
 
@@ -34,23 +36,32 @@ const Region = ({ name, redOpacity, path, newCases }) => {
         setAnchorEl(event.currentTarget);
         setColor(darkBlue);
         setOpacity(1);
-    }
+        console.log(name)
+    };
     const mouseLeave = () => {
         setAnchorEl(null);
         setColor(redOpacity ? red : blue);
         setOpacity(redOpacity || 1);
-    }
+    };
+    const navigate = ()=>{
+        let reg = REGIONS.find(element => element.name === name);
+        console.log(reg);
+        window.location.href = "http://localhost:3000/graph/"+ reg.id
+    };
 
     const open = Boolean(anchorEl);
     return (
         <>
+
             <path
                 d={path}
                 stroke="white"
                 fill={color}
                 opacity={opacity}
                 onMouseEnter={mouseEnter}
-                onMouseLeave={mouseLeave}>
+                onMouseLeave={mouseLeave}
+                onClick={navigate}
+            >
             </path>
             <Popover
                 id="mouse-over-popover"
@@ -78,6 +89,7 @@ const Region = ({ name, redOpacity, path, newCases }) => {
                     Nouveaux cas: {newCases}
                 </Typography></Popover>
         </>
+
     );
 };
 

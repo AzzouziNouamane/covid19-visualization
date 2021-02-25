@@ -3,6 +3,7 @@ import { REGIONS } from "./regions";
 import Region from "./Region";
 import {Route, Link, BrowserRouter, Switch, Redirect} from "react-router-dom";
 import Graph from "../../Graph/graph";
+import Button from "@material-ui/core/Button";
 
 const computeOpacities = (regionsNewCases, minNewCases, maxNewCases) => {
   return regionsNewCases.map(region => {
@@ -32,6 +33,7 @@ const Map = ({ regionsNewCasesData }) => {
     setRegionsNewCases(computeOpacities(regionsNewCasesData, minNewCases, maxNewCases));
   }, [regionsNewCasesData, minNewCases, maxNewCases]);
 
+
   return (
       <BrowserRouter>
         <div>
@@ -40,15 +42,16 @@ const Map = ({ regionsNewCasesData }) => {
           <g id="carte" transform="translate(12.000000, 12.000000)">
             {
               REGIONS.map(region =>
-                  <Link to={'/graph/'+region.id}>
                     <Region
                         redOpacity={regionsNewCases.find(r => region.id === r.regionId)?.opacity}
                         key={region.id}
                         path={region.path}
                         name={region.name}
                         newCases={regionsNewCases.find(r => region.id === r.regionId)?.newCases}>
+
                     </Region>
-                  </Link>)
+
+                  )
             }
           </g>
         </svg>
@@ -59,6 +62,8 @@ const Map = ({ regionsNewCasesData }) => {
       </BrowserRouter>
 
   );
+
+
 };
 
 Map.defaultProps = {

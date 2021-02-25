@@ -4,7 +4,7 @@ import Charto from "./chart";
 
 const api_URL = "http://localhost:3001/";
 
-const Graph = ({regionId}) => {
+const Graph = () => {
     let params = useParams();
     const [nb_cases, setCases] = useState({});
     const [nb_mental_cases, setMental] = useState({});
@@ -41,13 +41,12 @@ const Graph = ({regionId}) => {
     };
 
     useEffect(async () => {
+        console.log(params.regionId);
        await fetchData();
        await fetchDataMentalCases();
-
     }, []);
     return (
         <div>
-
             <Charto data={nb_cases}></Charto>
             <Charto data={nb_mental_cases}></Charto>
         </div>
