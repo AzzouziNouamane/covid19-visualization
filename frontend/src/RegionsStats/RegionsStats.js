@@ -10,6 +10,18 @@ import {faGlobeEurope, faList} from "@fortawesome/free-solid-svg-icons";
 import {REGIONS} from "./Map/regions";
 import UseLocalStorage from "../Utils/LocalStorage/UseLocalStorage";
 import Cases from "../Cases/Cases";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const notify = () => toast.error('Désolé, une erreur est survenue ! Merci de réessayer ultérieurement.', {
+    position: "bottom-left",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    });
 
 const RegionsStats = () => {
     const [modeMapStorage, setModeMapStorage] = UseLocalStorage('modeMap');
@@ -60,7 +72,9 @@ const RegionsStats = () => {
             setMinMaxMentalHealthEver(mentalHealthPerDay);
             setMentalHealthPerDay(mentalHealthPerDay);
             setMentalHealthNow(computeMentalHealthAtDate(casesPerDay[0].date, mentalHealthPerDay))
-        });
+        }).catch(err => {
+            notify();
+          });;
     }, []);
 
     useEffect(() => {
@@ -199,6 +213,18 @@ const RegionsStats = () => {
             </div>
 
             <Cases />
+
+            <ToastContainer
+              position="bottom-left"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
         </div>
     );
 };

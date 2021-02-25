@@ -1,8 +1,19 @@
 import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import Charto from "./chart";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const api_URL = "http://localhost:3001/";
+const notify = () => toast.error('Désolé, une erreur est survenue ! Merci de réessayer ultérieurement.', {
+    position: "bottom-left",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    });
 
 const Graph = () => {
     let params = useParams();
@@ -40,13 +51,29 @@ const Graph = () => {
     };
 
     useEffect(async () => {
-       await fetchData();
-       await fetchDataMentalCases();
+       await fetchData().catch(err => {
+        notify();
+      });;
+       await fetchDataMentalCases().catch(err => {
+        notify();
+      });;
     }, []);
     return (
         <div>
             <Charto data={nb_cases}></Charto>
             <Charto data={nb_mental_cases}></Charto>
+
+            <ToastContainer
+              position="bottom-left"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
         </div>
 
     );
