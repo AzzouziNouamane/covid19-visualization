@@ -195,7 +195,7 @@ const RegionsStats = () => {
         setModeMapStorage(newModeMap);
     };
 
-    const columns=["regionId","region", "newCases","anxiete","depression","pbsommeil"];
+    const columns = ["Région", "Nouveaux cas", "Anxiété", "Dépression","Problèmes de sommeil"];
     return (
         <div className="RegionsStats">
             <div id="display">

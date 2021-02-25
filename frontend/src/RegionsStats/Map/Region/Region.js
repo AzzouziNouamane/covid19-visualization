@@ -95,7 +95,7 @@ const Region = ({
                 <rect fill={red} opacity={redOpacity} x="0" y="0" width="5" height="5"/>
                 <rect fill="black" opacity={blackOpacity} x="0" y="0" width="5" height="5"/>
                 <rect fill={darkBlue} opacity={popover ? "1" : "0"} x="0" y="0" width="5" height="5"/>
-                { isUserRegion && <rect className="user-region" fill={darkBlue} x="0" y="0" width="5" height="5"/> }
+                { isUserRegion && <rect className="user-region-map" fill={darkBlue} x="0" y="0" width="5" height="5"/> }
             </pattern>
             <Popover
                 id="mouse-over-popover"
