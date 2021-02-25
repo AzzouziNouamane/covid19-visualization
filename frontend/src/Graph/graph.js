@@ -12,8 +12,8 @@ const Graph = () => {
     const fetchData = async () => {
         const response_nb_cases = await fetch(api_URL +"nbcases/data/month/" + params.regionId);
         let elt_cases = [[
-            { type: 'date', label: 'Day' },
-            'Number of cases ',
+            { type: 'date', label: 'mois' },
+            'Nombre de cas ',
         ]];
         let data = await response_nb_cases.json();
         data.forEach(e=>{
@@ -21,27 +21,25 @@ const Graph = () => {
             elt_cases.push(elt)
         });
         setCases(elt_cases);
-        console.log(elt_cases);
+
 
     };
 
     const fetchDataMentalCases = async ()=>{
-        const response_nb_mental = await fetch(api_URL +"mentalHealth/data/month/" + params.regionId);
+        const responseNbMental= await fetch(api_URL +"mentalHealth/data/month/" + params.regionId);
         let elt_mental =[[
             { type: 'date', label: 'Day' },
-            'Number of mental health issues ( depression, anxiety, problems of sleep',
+            'Nombre des gens qui ont des problèmes de santé mentale (dépression, anxiété, problèmes de sommeil)',
         ]];
-        let data = await response_nb_mental.json();
+        let data = await responseNbMental.json();
         data.forEach(e=>{
             let elt = [new Date(e[0], e[1]-1), e[2]];
            elt_mental.push(elt)
         });
         setMental(elt_mental);
-        console.log(elt_mental);
     };
 
     useEffect(async () => {
-        console.log(params.regionId);
        await fetchData();
        await fetchDataMentalCases();
     }, []);
