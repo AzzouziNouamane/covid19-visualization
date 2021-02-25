@@ -13,7 +13,7 @@ export const linear = (x1, y1, x2, y2, x) => {
 
 export const apiUrl = "http://localhost:3001/";
 
-export const notify = () => toast.error('Désolé, une erreur est survenue ! Merci de réessayer ultérieurement.', {
+export const notify = () => toast.error('Une erreur est survenue lors du chargement des données ! Merci de réessayer ultérieurement.', {
     position: "bottom-left",
     autoClose: 5000,
     hideProgressBar: false,
