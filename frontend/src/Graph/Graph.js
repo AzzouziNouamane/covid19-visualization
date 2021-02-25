@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Charto from "./Chart";
 import 'react-toastify/dist/ReactToastify.css';
 import {REGIONS} from "../RegionsStats/Map/regions";
-import {apiUrl, notify} from "../Utils/utils";
+import {apiUrl, dataLoadingError} from "../Utils/utils";
 
 const Graph = () => {
     let params = useParams();
@@ -40,10 +40,10 @@ const Graph = () => {
 
     useEffect(() => {
         fetchData().catch(() => {
-            notify();
+            dataLoadingError();
         });
         fetchDataMentalCases().catch(() => {
-            notify();
+            dataLoadingError();
         });
     }, []);
 

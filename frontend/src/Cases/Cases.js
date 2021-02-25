@@ -3,7 +3,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import liveDot from "../assets/live.png";
 import "./Cases.scss"
 import 'react-toastify/dist/ReactToastify.css';
-import {apiUrl, notify} from "../Utils/utils";
+import {apiUrl, dataLoadingError} from "../Utils/utils";
 
 const Cases = () => {
   const [cases, setCases] = useState({});
@@ -20,11 +20,11 @@ const Cases = () => {
 
   useEffect(() => {
     fetchData().catch(() => {
-      notify();
+      dataLoadingError();
     });
     const interval = setInterval(() => {
       fetchData().catch(() => {
-        notify();
+        dataLoadingError();
       });
     }, 60000);
     return () => clearInterval(interval);

@@ -10,7 +10,7 @@ import {faGlobeEurope, faList} from "@fortawesome/free-solid-svg-icons";
 import {REGIONS} from "./Map/regions";
 import UseLocalStorage from "../Utils/LocalStorage/UseLocalStorage";
 import 'react-toastify/dist/ReactToastify.css';
-import {notify} from "../Utils/utils";
+import {dataLoadingError} from "../Utils/utils";
 
 const RegionsStats = () => {
     const [modeMapStorage, setModeMapStorage] = UseLocalStorage('modeMap');
@@ -62,7 +62,7 @@ const RegionsStats = () => {
             setMentalHealthPerDay(mentalHealthPerDay);
             setMentalHealthNow(computeMentalHealthAtDate(casesPerDay[0].date, mentalHealthPerDay))
         }).catch(() => {
-            notify();
+            dataLoadingError();
         });
     }, []);
 
