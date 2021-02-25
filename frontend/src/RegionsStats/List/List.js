@@ -1,10 +1,10 @@
 import { Table } from "reactstrap";
 import PropTypes from "prop-types";
 import React from "react";
-import './list.css';
+import './List.css';
 
 
-export const List = ({ columns, regionsNewCasesData }) => (
+export const List = ({ columns, newCasesNow }) => (
     <Table bordered hover striped id="customers">
         <thead>
         <tr>
@@ -14,7 +14,7 @@ export const List = ({ columns, regionsNewCasesData }) => (
         </tr>
         </thead>
         <tbody>
-        {regionsNewCasesData.map((d) => (
+        {newCasesNow.map((d) => (
             <tr key={d.id}>
                 {columns.map((col) => (
                     <td key={col + d.id} style={{ verticalAlign: "middle" }}>
@@ -29,11 +29,11 @@ export const List = ({ columns, regionsNewCasesData }) => (
 
 List.propTypes = {
     columns: PropTypes.arrayOf(PropTypes.string).isRequired,
-    regionsNewCasesData: PropTypes.arrayOf(PropTypes.shape())
+    newCasesNowData: PropTypes.arrayOf(PropTypes.shape())
 };
 
 List.defaultProps = {
-    regionsNewCasesData: []
+    newCasesNowData: []
 };
   
 export default List;
