@@ -1,39 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { makeStyles, Slider, Tooltip, Typography } from "@material-ui/core";
-import moment from "moment";
+import moment from 'moment/min/moment-with-locales';
 import PropTypes from "prop-types";
+import ThemeContext from "../../Context/Theme/ThemeContext";
+import {computeDifferenceInDays} from "../../Utils/utils";
 
 const useStyles = makeStyles((theme) => ({
     slider: {
-        width: 300,
-        marginLeft: 100
+        width: 400,
+        marginBottom: 10
     }
 }));
 
-function simulateFetchFirstLastDates(ms) {
-    return new Promise(resolve => setTimeout(() => resolve({ firstDatasetDate: new Date(2020, 3, 22), lastDatasetDate: new Date(2020, 3, 24) }), ms));
-}
+moment.locale('fr');
 
-function computeDifferenceInDays(date1, date2) {
-    return (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24);
-}
-
-const DateSlider = ({onDateChange}) => {
+const DateSlider = ({onDateChange, minDate, maxDate}) => {
     const [firstDatasetDate, setFirstDatasetDate] = useState(null);
     const [currentSliderValue, setCurrentSliderValue] = useState(0);
     const [maxSliderValue, setMaxSliderValue] = useState(2);
     const [selectedDate, setSelectedDate] = useState(null);
     const classes = useStyles();
 
-    useEffect(() => {
-        simulateFetchFirstLastDates(432).then(resultDates => {
-            setFirstDatasetDate(resultDates.firstDatasetDate);
-            setMaxSliderValue(computeDifferenceInDays(resultDates.firstDatasetDate, resultDates.lastDatasetDate));
-            setSelectedDate(resultDates.firstDatasetDate);
+    const theme = useContext(ThemeContext);
 
-            onDateChange(resultDates.firstDatasetDate);
-        });
-    }, []);
+    useEffect(() => {
+        if (minDate && maxDate) {
+            setFirstDatasetDate(minDate);
+            setMaxSliderValue(computeDifferenceInDays(minDate, maxDate));
+            setSelectedDate(minDate);
+            onDateChange(minDate);
+        }
+    }, [minDate, maxDate]);
 
     const dateChanged = (event, newValue) => {
         if (newValue !== currentSliderValue) {
@@ -47,19 +44,19 @@ const DateSlider = ({onDateChange}) => {
     }
 
     const sliderLabelFormat = () => {
-        return selectedDate ? moment(selectedDate).format('DD/MM/YYYY') : '';
+        return selectedDate ? moment(selectedDate).format('DD MMMM YYYY') : '';
     }
 
     return (
         <div className={classes.slider}>
-                <Typography gutterBottom>
-                    Choix de la date
+                <Typography align='center'>
+                    Date: { sliderLabelFormat() }
                 </Typography>
                 <Slider
+                    color={ theme.isDark ? 'secondary': 'primary' }
                     min={0}
                     max={maxSliderValue}
                     defaultValue={0}
-                    step={1}
                     onChange={dateChanged}
                     valueLabelFormat={sliderLabelFormat}
                     ValueLabelComponent={({ children, open, value }) => {

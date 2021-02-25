@@ -85,10 +85,10 @@ const MentalHealthsparse = () => {
             resultsMentalHealth.forEach(test => {
                let depression ;
                let pbsommeil ;
-                    if(test.depression == " ") depression="0"
+                    if(test.depression === " ") depression="0"
                     else depression=test.depression;
 
-                if(test.pbsommeil == " ") pbsommeil="0"
+                if(test.pbsommeil === " ") pbsommeil="0"
                 else pbsommeil=test.pbsommeil;
                     const toSave = new MentalHealth({
                         periode: test.periode,

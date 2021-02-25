@@ -1,20 +1,67 @@
 import React from "react";
-
-import Cases from "./Cases/cases";
 import RegionsStats from "./RegionsStats/RegionsStats"
-import {BrowserRouter,Route, Switch} from 'react-router-dom';
-import Authentification from './Authentification/authentification';
+import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
+import Authentication from './Authentication/Authentication';
+import "./App.css";
+import ThemeMode from "./ThemeMode/ThemeMode";
+import UseLocalStorage from "./Utils/LocalStorage/UseLocalStorage";
+import { useState, useEffect } from 'react';
+import ThemeContext, { themes } from "./Context/Theme/ThemeContext";
+import Graph from "./Graph/Graph";
+import Cases from "./Cases/Cases";
+import {ToastContainer} from "react-toastify";
 
 const App = () => {
+  const [storageMode, setStorageMode] = UseLocalStorage('darkmode');
+  const [theme, setTheme] = useState(themes.light);
+
+  const toggleTheme = () => {
+    if (theme.isDark) {
+      setTheme(themes.light);
+      setStorageMode(themes.light);
+    }
+    else {
+      setTheme(themes.dark);
+      setStorageMode(themes.dark);
+    }
+  }
+
+    useEffect(() => {
+      if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+        setTheme(storageMode || themes.light);
+      }
+      else {
+        setTheme(storageMode || themes.dark);
+      }
+    }, [storageMode]);
+
   return (
-    <div>
+    <div className="App" style={theme}>
         <BrowserRouter>
         <Switch>
-            <Route exact path='/Authentification' component={Authentification} />
-            <Route exact path='/home' component={RegionsStats} />
-        </Switch>
+            <Route exact path="/">
+                <Redirect to="/home" />
+            </Route>
+            <Route exact path='/authentication' render={ (props) => <ThemeContext.Provider value={theme}> <Authentication {...props} /> </ThemeContext.Provider> } />
+            <Route exact path='/home' render={ (props) => <ThemeContext.Provider value={theme}> <RegionsStats {...props} /> </ThemeContext.Provider> } />
+            <Route exact path='/graph/:regionId' render={ (props) => <ThemeContext.Provider value={theme}> <Graph {...props} /> </ThemeContext.Provider> }/>
+             </Switch>
         </BrowserRouter>
+        <ThemeMode onChange={toggleTheme} mode={theme}/>
+        <Cases/>
+        <ToastContainer
+            position="bottom-left"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+        />
     </div>
+
   );
 };
 
