@@ -66,7 +66,6 @@ router.get('/data/month/:id', async (req, res) => {
 
 router.get('/data/day', (req, res) => {
     try {
-        let day_date = new Date(req.body.date);
         CasesPerDay.find({}, function(err, cases) {
             res.json(cases);
         });
@@ -74,8 +73,6 @@ router.get('/data/day', (req, res) => {
         res.json({"error" : e})
     }
 });
-
-
 
 
 router.get('/minmax', async (req, res) => {
