@@ -1,6 +1,6 @@
 import React from "react";
 import RegionsStats from "./RegionsStats/RegionsStats"
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
 import Authentication from './Authentication/Authentication';
 import "./App.css";
 import ThemeMode from "./ThemeMode/ThemeMode";
@@ -31,6 +31,9 @@ const App = () => {
     <div className="App" style={storageMode}>
         <BrowserRouter>
         <Switch>
+            <Route exact path="/">
+                <Redirect to="/home" />
+            </Route>
             <Route exact path='/authentication' render={ (props) => <ThemeContext.Provider value = {storageMode}> <Authentication {...props} /> </ThemeContext.Provider> } />
             <Route exact path='/home' render={ (props) => <ThemeContext.Provider value = {storageMode}> <RegionsStats {...props} /> </ThemeContext.Provider> } />
         </Switch>
