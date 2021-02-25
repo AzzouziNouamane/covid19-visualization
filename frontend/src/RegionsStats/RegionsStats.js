@@ -9,6 +9,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faGlobeEurope, faList} from "@fortawesome/free-solid-svg-icons";
 import {REGIONS} from "./Map/regions";
 import UseLocalStorage from "../Utils/LocalStorage/UseLocalStorage";
+import Cases from "../Cases/Cases";
 
 const RegionsStats = () => {
     const [modeMapStorage, setModeMapStorage] = UseLocalStorage('modeMap');
@@ -196,6 +197,8 @@ const RegionsStats = () => {
                     defaultChecked={!modeMap}
                 />
             </div>
+
+            <Cases />
         </div>
     );
 };
