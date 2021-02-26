@@ -3,12 +3,11 @@ import PropTypes from "prop-types";
 import React from "react";
 import './List.scss';
 import {useHistory} from "react-router-dom";
+import { REGIONS } from "./regions";
 
-
-export const List = ({ userRegionId, columns, newCasesNow }) => {
+export const List = ({ userRegionId, columns, newCasesNow, mentalHealthNow }) => {
     let history = useHistory();
-
-    return  (
+    return (
         <Table className="List" bordered hover striped>
             <thead>
             <tr>
@@ -18,24 +17,35 @@ export const List = ({ userRegionId, columns, newCasesNow }) => {
             </tr>
             </thead>
             <tbody>
-            {newCasesNow.map((d) => (
-                    <tr key={d.regionId}
-                        className={+userRegionId === +d.regionId ? "user-region" : ""}
-                        onClick={() => history.push("/graph/" + d.regionId)}
-                        style={{cursor: "pointer"}}>
-                        {
-                            columns.map((col) => (
-                            <td key={col + d.regionId} style={{verticalAlign: "middle"}}>
-                                {d[col]} {+userRegionId === +d.regionId && col === "regionId" && "(votre région)"}
-                            </td>
-                        ))}
+            {
+                REGIONS.map(region =>
+                <tr key={region.id}
+                    className={+userRegionId === +region.id ? "user-region-list" : ""}
+                    onClick={() => history.push("/graph/" + region.id)}
+                    style={{cursor: "pointer"}}>
+                    <td>
+                        {region.name} {+userRegionId === +region.id && "(votre région)"}
+                    </td>
+                    <td>
+                        {newCasesNow.find(r => region.id + "" === r.regionId)?.newCases || "?"}
+                    </td>
+                    <td>
+                        {mentalHealthNow.find(r => region.id + "" === r.regionId)?.anxiete || "?"}
+                    </td>
+                    <td>
+                        {mentalHealthNow.find(r => region.id + "" === r.regionId)?.depression || "?"}
+                    </td>
+                    <td>
+                        {mentalHealthNow.find(r => region.id + "" === r.regionId)?.pbsommeil || "?"}
+                    </td>
+
                 </tr>
-            ))}
+            )}
             </tbody>
         </Table>
     );
-
 }
+
 List.propTypes = {
     columns: PropTypes.arrayOf(PropTypes.string).isRequired,
     newCasesNowData: PropTypes.arrayOf(PropTypes.shape())
@@ -44,5 +54,5 @@ List.propTypes = {
 List.defaultProps = {
     newCasesNowData: []
 };
-  
+
 export default List;
