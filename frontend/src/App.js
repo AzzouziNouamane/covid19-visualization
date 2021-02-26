@@ -9,12 +9,29 @@ import { useState, useEffect } from 'react';
 import ThemeContext, { themes } from "./Context/Theme/ThemeContext";
 import Contact from "./ContactForm/contact-form";
 import Button from "reactstrap/lib/Button";
+import Graph from "./Graph/Graph";
+import Cases from "./Cases/Cases";
+import {ToastContainer} from "react-toastify";
+import Cookies from "js-cookie"
+
+
+
 
 const App = () => {
+
   const [storageMode, setStorageMode] = UseLocalStorage('darkmode');
   const [theme, setTheme] = useState(themes.light);
   const [contactVisible, setVisibility] = useState(true);
-
+  function AdminGuardedRoute(user: "login" | undefined)  {
+        return function ({ component: Component, ...rest }) {
+            return (
+                <Route
+                    {...rest}
+                    render={props => (!!user ?  <ThemeContext.Provider value={theme}><Component {...props} /> </ThemeContext.Provider> :  <Redirect to="/authentication" />)}
+                />
+            );
+        };
+    }
 
   const toggleTheme = () => {
     if (theme.isDark) {
@@ -36,6 +53,8 @@ const App = () => {
       }
     }, [storageMode]);
 
+    const AdminRoute = AdminGuardedRoute(Cookies.get("user"));
+
     let changeVisibility = () =>{
         setVisibility(false)
     };
@@ -48,10 +67,13 @@ const App = () => {
                 <Redirect to="/home" />
             </Route>
             <Route exact path='/authentication' render={ (props) => <ThemeContext.Provider value={theme}> <Authentication {...props} /> </ThemeContext.Provider> } />
+            <AdminRoute exact path='/home'   component={RegionsStats} />
+            <AdminRoute exact path='/graph/:regionId' component={Graph}/>
+
             <Route exact path='/home' render={ (props) => <ThemeContext.Provider value={theme}> <RegionsStats {...props} /> </ThemeContext.Provider> } />
             <Route exact path='/contact' render={ (props) => <ThemeContext.Provider value={theme}> <Contact {...props} /> </ThemeContext.Provider> } />
-
         </Switch>
+
             { contactVisible  ?
             <Link to="/contact">
                 <Button style={{ backgroundColor : theme.isDark? "white" : "black", color : theme.isDark? "black" : "white", }} onClick={changeVisibility}> Contact </Button>
@@ -59,6 +81,18 @@ const App = () => {
 
         </BrowserRouter>
         <ThemeMode onChange={toggleTheme} mode={theme}/>
+        <Cases/>
+        <ToastContainer
+            position="bottom-left"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+        />
     </div>
 
   );

@@ -32,11 +32,10 @@ app.use('/mentalHealth', mentalHealth_API);
 app.use('/nbcases', nb_cases_API);
 app.use('/contact', contact_API);
 
-const port = 3001;
+const PORT = process.env.PORT || 3001;
 
-
-app.listen(port, () => {
-    console.log('Server is up and running on port ' + port);
+app.listen(PORT, () => {
+    console.log('Server is up and running on port ' + PORT);
 });
 
 export { app }

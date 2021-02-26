@@ -3,14 +3,14 @@ import React from 'react';
 export const themes = {
     dark: {
         isDark:  true,
-        color:  'white',
+        color:  '#F5F5F5',
         background: 'black'
     },
 
     light: {
         isDark:  false,
         color: 'black',
-        background: 'white'
+        background: '#F5F5F5'
     }
 };
 

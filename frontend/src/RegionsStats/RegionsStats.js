@@ -3,13 +3,32 @@ import Map from "./Map/Map";
 import List from "./List/List";
 import DateSlider from "./DateSlider/DateSlider";
 import "./RegionsStats.scss";
-import {computeDifferenceInDays, linear} from "../Utils/utils";
+import {apiUrl, computeDifferenceInDays, linear} from "../Utils/utils";
 import Toggle from "react-toggle";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faGlobeEurope, faList} from "@fortawesome/free-solid-svg-icons";
-import {REGIONS} from "./Map/regions";
+import {REGIONS} from "./Map/Region/regions";
 import UseLocalStorage from "../Utils/LocalStorage/UseLocalStorage";
-import Cases from "../Cases/cases";
+import 'react-toastify/dist/ReactToastify.css';
+import {dataLoadingError} from "../Utils/utils";
+import {Redirect} from "react-router-dom";
+
+const getUserRegionId = async (lat, lon) => {
+    let regionId;
+    try {
+        let depRes = await fetch(`https://api-adresse.data.gouv.fr/reverse/?lon=${lon}&lat=${lat}`);
+        depRes = await depRes.json();
+        const depCode = depRes.features[0]?.properties?.context?.split(',')[0]
+
+        let regRes = await fetch(`https://geo.api.gouv.fr/departements/${depCode}`);
+        regRes = await regRes.json();
+        regionId = +regRes.codeRegion
+    } catch (e) {
+        dataLoadingError();
+    }
+
+    return regionId;
+}
 
 const RegionsStats = () => {
     const [modeMapStorage, setModeMapStorage] = UseLocalStorage('modeMap');
@@ -22,13 +41,22 @@ const RegionsStats = () => {
     const [maxNewCasesNow, setMaxNewCasesNow] = useState(0);
     const [minNewCasesEver, setMinNewCasesEver] = useState(0);
     const [maxNewCasesEver, setMaxNewCasesEver] = useState(0);
+    const [minMentalHealthEver, setMinMentalHealthEver] = useState(0);
+    const [maxMentalHealthEver, setMaxMentalHealthEver] = useState(0);
     const [minDate, setMinDate] = useState(null);
     const [maxDate, setMaxDate] = useState(null);
+    const [userRegionId, setUserRegionId] = useState(null);
+
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition(async (position) => {
+            setUserRegionId(await getUserRegionId(position.coords.latitude, position.coords.longitude));
+        })
+    }, [])
 
     useEffect(() => {
         Promise.all([
-            fetch('http://localhost:3001/nbcases/data/day'),
-            fetch('http://localhost:3001/mentalHealth/data')
+            fetch(apiUrl + 'nbcases/data/day'),
+            fetch(apiUrl + 'mentalHealth/data')
         ]).then(async ([casesPerDay, mentalHealthPerDay]) => {
             casesPerDay = await casesPerDay.json();
             mentalHealthPerDay = await mentalHealthPerDay.json();
@@ -55,8 +83,11 @@ const RegionsStats = () => {
             setNewCasesPerDay(casesPerDay);
             setNewCasesNow(casesPerDay[0].regions);
 
+            setMinMaxMentalHealthEver(mentalHealthPerDay);
             setMentalHealthPerDay(mentalHealthPerDay);
             setMentalHealthNow(computeMentalHealthAtDate(casesPerDay[0].date, mentalHealthPerDay))
+        }).catch(() => {
+            dataLoadingError();
         });
     }, []);
 
@@ -80,6 +111,26 @@ const RegionsStats = () => {
             }
             setMinNewCasesEver(minNewCasesNowEver);
             setMaxNewCasesEver(maxNewCasesNowEver);
+        }
+    }
+
+    const setMinMaxMentalHealthEver = (mentalHealthPerDay) => {
+        if (mentalHealthPerDay) {
+            let minMentalHealthEver = Number.MAX_SAFE_INTEGER;
+            let maxMentalHealthEver = 0;
+            for (let i = 5; i < mentalHealthPerDay.length; i++) {
+                for (const region of mentalHealthPerDay[i].regions) {
+                    const regionMentalHealth = (+region.anxiete + +region.depression) / 2;
+                    if (regionMentalHealth < minMentalHealthEver) {
+                        minMentalHealthEver = regionMentalHealth;
+                    }
+                    if (regionMentalHealth > maxMentalHealthEver) {
+                        maxMentalHealthEver = regionMentalHealth;
+                    }
+                }
+            }
+            setMinMentalHealthEver(minMentalHealthEver);
+            setMaxMentalHealthEver(maxMentalHealthEver);
         }
     }
 
@@ -141,22 +192,29 @@ const RegionsStats = () => {
 
     const onModeMapChange = () => {
         const newModeMap = !modeMap;
-        setModeMap(newModeMap)
+        setModeMap(newModeMap);
         setModeMapStorage(newModeMap);
     };
 
-    const columns=["regionId", "newCases"];
+
+    const columns = ["Région", "Nouveaux cas", "Anxiété", "Dépression","Problèmes de sommeil"];
+
     return (
+
         <div className="RegionsStats">
+
             <div id="display">
                 <DateSlider minDate={minDate} maxDate={maxDate} onDateChange={onDateChange}/>
-                { !modeMap && <List columns={columns} newCasesNow={newCasesNow || []}/>}
-                { modeMap && <Map minNewCasesNow={minNewCasesNow}
+                { !modeMap && <List userRegionId={userRegionId} columns={columns} newCasesNow={newCasesNow || []} mentalHealthNow={mentalHealthNow || []}/>}
+                { modeMap && <Map userRegionId={userRegionId}
+                                  minNewCasesNow={minNewCasesNow}
                                   maxNewCasesNow={maxNewCasesNow}
                                   minNewCasesEver={minNewCasesEver}
                                   maxNewCasesEver={maxNewCasesEver}
                                   newCasesNow={newCasesNow || []}
-                                  mentalHealthNow={mentalHealthNow || []}/>}
+                                  mentalHealthNow={mentalHealthNow || []}
+                                  minMentalHealthEver={minMentalHealthEver}
+                                  maxMentalHealthEver={maxMentalHealthEver}/>}
             </div>
             <div id="mapMode">
                 <Toggle
@@ -172,8 +230,6 @@ const RegionsStats = () => {
                     defaultChecked={!modeMap}
                 />
             </div>
-
-            <Cases />
         </div>
     );
 };

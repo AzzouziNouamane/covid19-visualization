@@ -3,6 +3,8 @@ import { withFormik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import "./Authentication.scss";
 import ThemeContext from "../Context/Theme/ThemeContext";
+import Cookies from "js-cookie"
+
 
 const Authentication = (props) => {
     const theme = useContext(ThemeContext);
@@ -22,7 +24,7 @@ const Authentication = (props) => {
             <div className="Authentication">
                 <div className="login-wrapper" style={loginPageStyle}>
                     <h2>Login Page</h2>
-                    <Form className="form-container" action={onsubmit} >
+                    <Form className="form-container" >
                         <div className="form-group">
                             <label htmlFor="email">Email</label>
                             <Field type="text" name="email" className={"form-control"} placeholder="Email" id="email" />
@@ -30,7 +32,7 @@ const Authentication = (props) => {
                         </div>
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
-                            <Field type="password" name="password" className={"form-control"} placeholder="Password" id="psw" />
+                            <Field type="password" name="password" className={"form-control"} placeholder="Mot de passe" id="psw" />
                             { touched.password && errors.password && <span className="help-block text-danger">{errors.password}</span> }
                         </div>
                         <button className="button" type="submit" >Login</button>
@@ -51,18 +53,19 @@ const LoginFormik = withFormik({
         }
     },
     validationSchema: Yup.object().shape({
-        email: Yup.string().email('Email not valid').required('Email is required'),
-        password: Yup.string().required('Password is required')
+        email: Yup.string().email('Email invalide').required('Email requis'),
+        password: Yup.string().required('Mot de passe requis')
     }),
 
     handleSubmit: (props) => {
-        //const {history} = props;
-        if(props.email === "admin@polytech.com" && props.password === "admin" )
-        {alert('SUCCESS Login');
-            window.location.href = "http://localhost:3000/home"
-            }
 
-        else {alert('Wrong Email or Password try it again ')}
+        if(props.email === "admin@polytech.com" && props.password === "admin" ) {
+            alert('SUCCESS Login');
+            window.location.href = "http://localhost:3000/home";
+            Cookies.set("user","login");
+        } else {
+            alert('Email ou mot de passe erroné. Veuillez réessayer. ')
+        }
 
     },
 
