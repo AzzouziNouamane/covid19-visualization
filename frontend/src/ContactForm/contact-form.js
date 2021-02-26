@@ -21,8 +21,12 @@ const Contact = () => {
     const theme = useContext(ThemeContext);
     const handleSubmit = event => {
         event.preventDefault();
-
-            sendEmail();
+            if (formData.name ==='' || formData.email === '' || formData.message ==='' ){
+                alert("Merci de remplir tous les champs ");
+            }else {
+                sendEmail();
+                alert("Votre message a été envoyé avec succès ");
+            }
             setFormData({
                 name: '',
                 email: '',
@@ -47,7 +51,7 @@ const Contact = () => {
                 <input
                     type="text"
                     name="name"
-                    placeholder="Name"
+                    placeholder="Nom"
                     onChange={updateInput}
                     value={formData.name || ''}
                 />
@@ -65,8 +69,8 @@ const Contact = () => {
                     onChange={updateInput}
                     value={formData.message || ''}
                 ></textarea>
-                <Button  onClick={() => history.push("/home/")} style={{ backgroundColor : theme.isDark? "white" : "black", color : theme.isDark? "black" : "white", }}> Back </Button>
-                <button style={{ backgroundColor : theme.isDark? "white" : "black", color : theme.isDark? "black" : "white" }} type="submit">Submit</button>
+                <Button  onClick={() => history.push("/home/")} style={{ backgroundColor : theme.isDark? "white" : "black", color : theme.isDark? "black" : "white", }}> Retour </Button>
+                <button style={{ backgroundColor : theme.isDark? "white" : "black", color : theme.isDark? "black" : "white" }} type="submit" >Envoyer</button>
             </form>
         </>
     )
