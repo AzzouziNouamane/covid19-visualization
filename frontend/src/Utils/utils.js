@@ -11,7 +11,16 @@ export const linear = (x1, y1, x2, y2, x) => {
     return ((y2 - y1) / (x2 - x1)) * x + (y2 - ((y2 - y1) / (x2 - x1)) * x2);
 }
 
-export const apiUrl = "http://localhost:3001/";
+let API = "";
+if(process.env.NODE_ENV === "development") {
+    API = "http://localhost:3001/";
+}
+else {
+    API = "https://programming-web-server.herokuapp.com/";
+} 
+
+export const apiUrl = API;
+
 
 export const dataLoadingError = () => toast.error('Une erreur est survenue lors du chargement des données ! Merci de réessayer ultérieurement.', {
     position: "bottom-left",
