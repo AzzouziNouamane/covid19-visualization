@@ -1,13 +1,13 @@
-.user-region {
+.user-region-map {
   opacity: 0;
-  animation-name: blink;
+  animation-name: blink-map;
   animation-duration: 1s;
   animation-timing-function: cubic-bezier(0.390, 0.575, 0.565, 1.000);
   animation-iteration-count: 4;
   animation-fill-mode: both;
 }
 
-@keyframes blink {
+@keyframes blink-map {
   0% {
     opacity: 0;
   }
