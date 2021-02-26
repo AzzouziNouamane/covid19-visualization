@@ -11,6 +11,7 @@ import {REGIONS} from "./Map/Region/regions";
 import UseLocalStorage from "../Utils/LocalStorage/UseLocalStorage";
 import 'react-toastify/dist/ReactToastify.css';
 import {dataLoadingError} from "../Utils/utils";
+import {Redirect} from "react-router-dom";
 
 const getUserRegionId = async (lat, lon) => {
     let regionId;
@@ -196,8 +197,13 @@ const RegionsStats = () => {
     };
 
     const columns=["regionId", "newCases"];
+
+
+
     return (
+
         <div className="RegionsStats">
+
             <div id="display">
                 <DateSlider minDate={minDate} maxDate={maxDate} onDateChange={onDateChange}/>
                 { !modeMap && <List userRegionId={userRegionId} columns={columns} newCasesNow={newCasesNow || []}/>}

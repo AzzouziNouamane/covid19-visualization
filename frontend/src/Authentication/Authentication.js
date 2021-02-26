@@ -3,6 +3,8 @@ import { withFormik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import "./Authentication.scss";
 import ThemeContext from "../Context/Theme/ThemeContext";
+import Cookies from "js-cookie"
+
 
 const Authentication = (props) => {
     const theme = useContext(ThemeContext);
@@ -22,7 +24,7 @@ const Authentication = (props) => {
             <div className="Authentication">
                 <div className="login-wrapper" style={loginPageStyle}>
                     <h2>Login Page</h2>
-                    <Form className="form-container" action={onsubmit} >
+                    <Form className="form-container" >
                         <div className="form-group">
                             <label htmlFor="email">Email</label>
                             <Field type="text" name="email" className={"form-control"} placeholder="Email" id="email" />
@@ -56,10 +58,11 @@ const LoginFormik = withFormik({
     }),
 
     handleSubmit: (props) => {
-        //const {history} = props;
+
         if(props.email === "admin@polytech.com" && props.password === "admin" ) {
             alert('SUCCESS Login');
-            window.location.href = "http://localhost:3000/home"
+            window.location.href = "http://localhost:3000/home";
+            Cookies.set("user","login");
         } else {
             alert('Email ou mot de passe erroné. Veuillez réessayer. ')
         }

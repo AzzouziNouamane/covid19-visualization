@@ -10,10 +10,26 @@ import ThemeContext, { themes } from "./Context/Theme/ThemeContext";
 import Graph from "./Graph/Graph";
 import Cases from "./Cases/Cases";
 import {ToastContainer} from "react-toastify";
+import Cookies from "js-cookie"
+
+
+
 
 const App = () => {
+
   const [storageMode, setStorageMode] = UseLocalStorage('darkmode');
   const [theme, setTheme] = useState(themes.light);
+
+    function AdminGuardedRoute(user: "login" | undefined)  {
+        return function ({ component: Component, ...rest }) {
+            return (
+                <Route
+                    {...rest}
+                    render={props => (!!user ?  <ThemeContext.Provider value={theme}><Component {...props} /> </ThemeContext.Provider> :  <Redirect to="/authentication" />)}
+                />
+            );
+        };
+    }
 
   const toggleTheme = () => {
     if (theme.isDark) {
@@ -35,6 +51,8 @@ const App = () => {
       }
     }, [storageMode]);
 
+    const AdminRoute = AdminGuardedRoute(Cookies.get("user"));
+
   return (
     <div className="App" style={theme}>
         <BrowserRouter>
@@ -43,8 +61,8 @@ const App = () => {
                 <Redirect to="/home" />
             </Route>
             <Route exact path='/authentication' render={ (props) => <ThemeContext.Provider value={theme}> <Authentication {...props} /> </ThemeContext.Provider> } />
-            <Route exact path='/home' render={ (props) => <ThemeContext.Provider value={theme}> <RegionsStats {...props} /> </ThemeContext.Provider> } />
-            <Route exact path='/graph/:regionId' render={ (props) => <ThemeContext.Provider value={theme}> <Graph {...props} /> </ThemeContext.Provider> }/>
+            <AdminRoute exact path='/home'   component={RegionsStats} />
+            <AdminRoute exact path='/graph/:regionId' component={Graph}/>
              </Switch>
         </BrowserRouter>
         <ThemeMode onChange={toggleTheme} mode={theme}/>
