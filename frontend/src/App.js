@@ -69,16 +69,8 @@ const App = () => {
             <Route exact path='/authentication' render={ (props) => <ThemeContext.Provider value={theme}> <Authentication {...props} /> </ThemeContext.Provider> } />
             <AdminRoute exact path='/home'   component={RegionsStats} />
             <AdminRoute exact path='/graph/:regionId' component={Graph}/>
-
-            <Route exact path='/home' render={ (props) => <ThemeContext.Provider value={theme}> <RegionsStats {...props} /> </ThemeContext.Provider> } />
-            <Route exact path='/contact' render={ (props) => <ThemeContext.Provider value={theme}> <Contact {...props} /> </ThemeContext.Provider> } />
+            <AdminRoute exact path='/contact' component={Contact}/>
         </Switch>
-
-            { contactVisible  ?
-            <Link to="/contact">
-                <Button style={{ backgroundColor : theme.isDark? "white" : "black", color : theme.isDark? "black" : "white", }} onClick={changeVisibility}> Contact </Button>
-            </Link> :<div></div>}
-
         </BrowserRouter>
         <ThemeMode onChange={toggleTheme} mode={theme}/>
         <Cases/>

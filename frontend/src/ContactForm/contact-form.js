@@ -3,10 +3,14 @@ import './styled.scss'
 import axios from "axios";
 import {colors} from "@material-ui/core";
 import ThemeContext from "../Context/Theme/ThemeContext";
+import Button from "reactstrap/lib/Button";
+import {useHistory} from "react-router-dom";
+
 
 
 const Contact = () => {
     const [formData, setFormData] = useState({});
+    const history = useHistory();
 
     const updateInput = e => {
         setFormData({
@@ -61,6 +65,7 @@ const Contact = () => {
                     onChange={updateInput}
                     value={formData.message || ''}
                 ></textarea>
+                <Button  onClick={() => history.push("/home/")} style={{ backgroundColor : theme.isDark? "white" : "black", color : theme.isDark? "black" : "white", }}> Back </Button>
                 <button style={{ backgroundColor : theme.isDark? "white" : "black", color : theme.isDark? "black" : "white" }} type="submit">Submit</button>
             </form>
         </>

@@ -86,9 +86,8 @@ Button {
   background: black;
   color: #fff;
   padding: 20px;
-  width: 50%;
+  width: 48%;
   text-transform: uppercase;
   letter-spacing: 5px;
-  margin-top: 5%;
-  margin-bottom: 5%;
+  margin: 5% 1%;
 }
