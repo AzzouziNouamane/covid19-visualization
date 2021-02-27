@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import assert from 'assert/strict';
+import assert from 'assert';
 chai.use(chaiHttp);
 
 

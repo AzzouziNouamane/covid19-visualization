@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import mentalhealth from '../src/APIs/MentalHealth/index.js';
-import assert from 'assert/strict';
+import assert from 'assert';
 chai.use(chaiHttp);
 
 
