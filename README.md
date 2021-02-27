@@ -5,10 +5,10 @@ Rania FEKIH - Anis KHALILI - Nouamane AZZOUZI - Yury SILVESTROV-HENOCQ
 **Demo deployment link**
 https://priceless-euclid-ede6dd.netlify.app/
 
-**Authentication**
-For the authentication, the email and password are as such : 
-**email :** admin@polytech.com
-**password:** admin
+**Authentication**  
+For the authentication, the email and password are as such :  
+**email :** admin@polytech.com  
+**password:** admin  
 
 ## How to start the project
 Run the following commands to start the backend:
