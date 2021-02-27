@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {REGIONS} from "../RegionsStats/Map/Region/regions";
 import {apiUrl, dataLoadingError} from "../Utils/utils";
 import Button from "reactstrap/lib/Button";
-import "../App.css";
+import "../App.scss";
 import ThemeContext from "../Context/Theme/ThemeContext";
 import {useHistory} from "react-router-dom";
 
@@ -61,9 +61,6 @@ const Graph = () => {
             <h1 style={{marginTop: "0", paddingTop: "20px"}}>{ REGIONS.find(element => +element.id === +params.regionId)?.name }</h1>
             <Charto data={nbCases}/>
             <Charto data={nbMentalCases}/>
-            <Button  onClick={() => history.push("/home/")} style={{ backgroundColor : theme.isDark? "white" : "black", color : theme.isDark? "black" : "white", }}> Retour </Button>
-            <Button  onClick={() => history.push("/contact/")} style={{ backgroundColor : theme.isDark? "white" : "black", color : theme.isDark? "black" : "white", }}> Contact </Button>
-
         </div>
     );
 };

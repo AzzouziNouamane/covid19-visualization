@@ -21,17 +21,17 @@ const Contact = () => {
     const theme = useContext(ThemeContext);
     const handleSubmit = event => {
         event.preventDefault();
-            if (formData.name ==='' || formData.email === '' || formData.message ==='' ){
-                alert("Merci de remplir tous les champs ");
-            }else {
-                sendEmail();
-                alert("Votre message a été envoyé avec succès ");
-            }
-            setFormData({
-                name: '',
-                email: '',
-                message: ''
-            })
+        if (formData.name ==='' || formData.email === '' || formData.message ==='' ){
+            alert("Merci de remplir tous les champs ");
+        }else {
+            sendEmail();
+            alert("Votre message a été envoyé avec succès ");
+        }
+        setFormData({
+            name: '',
+            email: '',
+            message: ''
+        })
 
 
     };
@@ -40,8 +40,8 @@ const Contact = () => {
             'http://localhost:3001/contact',
             formData
         ).catch(error => {
-                console.log(error)
-            })
+            console.log(error)
+        })
     };
 
     return (
@@ -63,13 +63,11 @@ const Contact = () => {
                     value={formData.email || ''}
                 />
                 <textarea
-                    type="text"
                     name="message"
                     placeholder="Message"
                     onChange={updateInput}
                     value={formData.message || ''}
-                ></textarea>
-                <Button  onClick={() => history.push("/home/")} style={{ backgroundColor : theme.isDark? "white" : "black", color : theme.isDark? "black" : "white", }}> Retour </Button>
+                />
                 <button style={{ backgroundColor : theme.isDark? "white" : "black", color : theme.isDark? "black" : "white" }} type="submit" >Envoyer</button>
             </form>
         </>
