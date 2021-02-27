@@ -4,8 +4,6 @@ import axios from "axios";
 import ThemeContext from "../Context/Theme/ThemeContext";
 import {apiUrl} from "../Utils/utils";
 
-
-
 const Contact = () => {
     const [formData, setFormData] = useState({});
 
