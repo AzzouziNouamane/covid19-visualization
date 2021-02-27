@@ -1,16 +1,13 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useState} from "react";
 import './styled.scss'
 import axios from "axios";
-import {colors} from "@material-ui/core";
 import ThemeContext from "../Context/Theme/ThemeContext";
-import Button from "reactstrap/lib/Button";
-import {useHistory} from "react-router-dom";
+import {apiUrl} from "../Utils/utils";
 
 
 
 const Contact = () => {
     const [formData, setFormData] = useState({});
-    const history = useHistory();
 
     const updateInput = e => {
         setFormData({
@@ -37,7 +34,7 @@ const Contact = () => {
     };
     const sendEmail = () => {
         axios.post(
-            'http://localhost:3001/contact',
+            apiUrl + 'contact',
             formData
         ).catch(error => {
             console.log(error)

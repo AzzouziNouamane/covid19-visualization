@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useEffect} from "react";
 import Charto from "./Chart";
 import 'react-toastify/dist/ReactToastify.css';
 import {REGIONS} from "../RegionsStats/Map/Region/regions";
