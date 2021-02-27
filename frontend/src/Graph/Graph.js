@@ -5,7 +5,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import {REGIONS} from "../RegionsStats/Map/Region/regions";
 import {apiUrl, dataLoadingError} from "../Utils/utils";
 import "../App.scss";
-
+import CircularProgress from '@material-ui/core/CircularProgress';
+import "./Graph.scss";
 
 
 
@@ -13,6 +14,7 @@ const Graph = () => {
     let params = useParams();
     const [nbCases, setCases] = useState({});
     const [nbMentalCases, setMental] = useState({});
+    const [loading, setLoading] = useState(true);
 
     const fetchData = async () => {
         const responseNbCases = await fetch(apiUrl +"nbcases/data/month/" + params.regionId);
@@ -25,7 +27,9 @@ const Graph = () => {
             let elt = [new Date(e[0], e[1]-1), e[2]];
             eltCases.push(elt)
         });
-        setCases(eltCases);
+
+        setCases(eltCases)
+        setLoading(false);
     };
 
     const fetchDataMentalCases = async ()=>{
@@ -40,6 +44,7 @@ const Graph = () => {
             eltMental.push(elt)
         });
         setMental(eltMental);
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -52,10 +57,19 @@ const Graph = () => {
     }, []);
 
     return (
-        <div>
-            <h1 style={{marginTop: "0", paddingTop: "20px"}}>{ REGIONS.find(element => +element.id === +params.regionId)?.name }</h1>
-            <Charto data={nbCases}/>
-            <Charto data={nbMentalCases}/>
+        <div className = "Graph">
+             {loading || (!nbCases && !nbMentalCases) ? (
+            <div className = "loadingStats">
+              <CircularProgress className = "firstSpinner" color="secondary" />
+              <CircularProgress className = "secondSpinner" color="secondary" />
+            </div>
+        ) : (
+            <div>            
+                <h1 style={{marginTop: "0", paddingTop: "20px"}}>{ REGIONS.find(element => +element.id === +params.regionId)?.name }</h1>
+                <Charto data={nbCases}/>
+                <Charto data={nbMentalCases}/>
+            </div>
+        )}
         </div>
     );
 };
