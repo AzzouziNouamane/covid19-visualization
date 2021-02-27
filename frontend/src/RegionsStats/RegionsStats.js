@@ -41,7 +41,7 @@ const RegionsStats = () => {
     const [mentalHealthNow, setMentalHealthNow] = useState([]);
     const [newCasesPerDay, setNewCasesPerDay] = useState([]);
     const [mentalHealthPerDay, setMentalHealthPerDay] = useState([]);
-    const [modeMap, setModeMap] = useState(modeMapStorage);
+    const [modeMap, setModeMap] = useState(true);
     const [minNewCasesNow, setMinNewCasesNow] = useState(0);
     const [maxNewCasesNow, setMaxNewCasesNow] = useState(0);
     const [minNewCasesEver, setMinNewCasesEver] = useState(0);
@@ -98,7 +98,7 @@ const RegionsStats = () => {
 
     useEffect(() => {
         if (modeMapStorage !== undefined) {
-        setModeMap(modeMapStorage);
+            setModeMap(modeMapStorage);
         }
     }, [modeMapStorage]);
 
@@ -234,7 +234,7 @@ const RegionsStats = () => {
                         ),
                     }}
                     onChange={onModeMapChange}
-                    defaultChecked={!modeMap}
+                    checked={!modeMap}
                 />
             </div>
         </div>
