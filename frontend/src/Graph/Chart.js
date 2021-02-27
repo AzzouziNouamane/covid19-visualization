@@ -5,8 +5,7 @@ const Charto = ({data}) => {
     const theme = useContext(ThemeContext);
     return (
         <Chart
-            width={'1500px'}
-            height={'700px'}
+            style={{marginTop : "80px"}}
             chartType="LineChart"
             loader={<div>Chargement</div>}
             data={data}

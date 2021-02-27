@@ -13,7 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {dataLoadingError} from "../Utils/utils";
 import {BrowserRouter, Link, Redirect} from "react-router-dom";
 import Button from "reactstrap/lib/Button";
-import "../App.css";
+import "../App.scss";
 import ThemeContext from "../Context/Theme/ThemeContext";
 import {useHistory} from "react-router-dom";
 
@@ -41,7 +41,7 @@ const RegionsStats = () => {
     const [mentalHealthNow, setMentalHealthNow] = useState([]);
     const [newCasesPerDay, setNewCasesPerDay] = useState([]);
     const [mentalHealthPerDay, setMentalHealthPerDay] = useState([]);
-    const [modeMap, setModeMap] = useState(modeMapStorage);
+    const [modeMap, setModeMap] = useState(true);
     const [minNewCasesNow, setMinNewCasesNow] = useState(0);
     const [maxNewCasesNow, setMaxNewCasesNow] = useState(0);
     const [minNewCasesEver, setMinNewCasesEver] = useState(0);
@@ -97,7 +97,9 @@ const RegionsStats = () => {
     }, []);
 
     useEffect(() => {
-        setModeMap(modeMapStorage);
+        if (modeMapStorage !== undefined) {
+            setModeMap(modeMapStorage);
+        }
     }, [modeMapStorage]);
 
     const setMinMaxNewCasesEver = (dataPerDay) => {
@@ -202,10 +204,7 @@ const RegionsStats = () => {
     };
 
 
-    const columns = ["Région", "Nouveaux cas", "Anxiété", "Dépression","Problèmes de sommeil"];
-
-    const theme = useContext(ThemeContext);
-    const history = useHistory();
+    const columns = ["Région", "Nouveaux cas", "Anxiété", "Dépression", "Problèmes de sommeil"];
 
     return (
 
@@ -235,12 +234,9 @@ const RegionsStats = () => {
                         ),
                     }}
                     onChange={onModeMapChange}
-                    defaultChecked={!modeMap}
+                    checked={!modeMap}
                 />
             </div>
-            <Button  onClick={() => history.push("/contact")} style={{ backgroundColor : theme.isDark? "white" : "black", color : theme.isDark? "black" : "white", }} > Contact </Button>
-
-
         </div>
     );
 };
