@@ -56,13 +56,12 @@ const LoginFormik = withFormik({
         password: Yup.string().required('Mot de passe requis')
     }),
 
-    handleSubmit: (props) => {
+    handleSubmit: (values, { props }) => {
 
-        if(props.email === "admin@polytech.com" && props.password === "admin" ) {
+        if(values.email === "admin@polytech.com" && values.password === "admin" ) {
             alert('Vous êtes authentifié !');
-            window.location = "home";
-            //window.location.href = apiUrl + "home";
-            Cookies.set("user","login");
+            props.authenticated();
+            props.history.push('/home')
         } else {
             alert('Email ou mot de passe erroné. Veuillez réessayer. ')
         }
