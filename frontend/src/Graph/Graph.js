@@ -4,20 +4,15 @@ import Charto from "./Chart";
 import 'react-toastify/dist/ReactToastify.css';
 import {REGIONS} from "../RegionsStats/Map/Region/regions";
 import {apiUrl, dataLoadingError} from "../Utils/utils";
-import Button from "reactstrap/lib/Button";
 import "../App.scss";
-import ThemeContext from "../Context/Theme/ThemeContext";
-import {useHistory} from "react-router-dom";
 
 
 
 
 const Graph = () => {
     let params = useParams();
-    const theme = useContext(ThemeContext);
     const [nbCases, setCases] = useState({});
     const [nbMentalCases, setMental] = useState({});
-    const history = useHistory();
 
     const fetchData = async () => {
         const responseNbCases = await fetch(apiUrl +"nbcases/data/month/" + params.regionId);
