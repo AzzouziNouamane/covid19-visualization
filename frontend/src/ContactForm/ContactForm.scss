@@ -5,7 +5,6 @@ h1 {
   font: 30px Helvetica;
   letter-spacing: 2px;
   text-transform: uppercase;
-  letter-spacing: 10px;
 }
 
 form {
@@ -22,7 +21,6 @@ form {
     padding: 20px;
     width: 500px;
     margin-bottom: 20px;
-    font-size: 18px;
     outline: none;
     transition: all 0.2s ease-in-out;
 
@@ -43,7 +41,7 @@ form {
     }
   }
 
-  p{
+  p {
     color : red;
   }
   textarea {

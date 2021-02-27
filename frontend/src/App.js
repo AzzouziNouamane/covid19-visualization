@@ -7,18 +7,18 @@ import ThemeMode from "./ThemeMode/ThemeMode";
 import UseLocalStorage from "./Utils/LocalStorage/UseLocalStorage";
 import { useState, useEffect } from 'react';
 import ThemeContext, { themes } from "./Context/Theme/ThemeContext";
-import Contact from "./ContactForm/contact-form";
+import Contact from "./ContactForm/ContactForm";
 import Graph from "./Graph/Graph";
 import Cases from "./Cases/Cases";
 import {ToastContainer} from "react-toastify";
 import Cookies from "js-cookie"
 import Button from "reactstrap/lib/Button";
 
-const AdminGuardedRoute = ({ theme, component: Component, ...rest }) => {
+const AdminGuardedRoute = ({ auth, theme, component: Component, ...rest }) => {
     return (
         <Route
             {...rest}
-            render={props => (!!Cookies.get("user") ?  <ThemeContext.Provider value={theme}><Component {...props} /> </ThemeContext.Provider> :  <Redirect to="/authentication" />)}
+            render={props => (auth ?  <ThemeContext.Provider value={theme}><Component {...props} /> </ThemeContext.Provider> :  <Redirect to="/authentication" />)}
         />
     );
 }
@@ -27,6 +27,7 @@ const App = () => {
     const [storageMode, setStorageMode] = UseLocalStorage('darkmode');
     const [theme, setTheme] = useState(themes.light);
     const history = useHistory();
+    const [auth, setAuth] = useState(Cookies.get("user"));
 
     const toggleTheme = () => {
         if (theme.isDark) {
@@ -48,6 +49,19 @@ const App = () => {
         }
     }, [storageMode]);
 
+    useEffect(() => {
+        if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+            setTheme(storageMode || themes.light);
+        }
+        else {
+            setTheme(storageMode || themes.dark);
+        }
+    }, [storageMode]);
+
+    const authenticated = () => {
+        setAuth(true);
+        Cookies.set("user", "login");
+    }
 
     return (
         <div className="App" style={theme}>
@@ -55,13 +69,13 @@ const App = () => {
                 <Route exact path="/">
                     <Redirect to="/home" />
                 </Route>
-                <Route exact path='/authentication' render={ (props) => <ThemeContext.Provider value={theme}> <Authentication {...props} /> </ThemeContext.Provider> } />
-                <AdminGuardedRoute theme={theme} exact path='/home' component={RegionsStats} />
-                <AdminGuardedRoute theme={theme} exact path='/graph/:regionId' component={Graph}/>
-                <AdminGuardedRoute theme={theme} exact path='/contact' component={Contact}/>
+                <Route exact path='/authentication' render={ (props) => <ThemeContext.Provider value={theme}> <Authentication {...props} history={history} authenticated={authenticated} /> </ThemeContext.Provider> } />
+                <AdminGuardedRoute auth={auth} theme={theme} exact path='/home' component={RegionsStats} />
+                <AdminGuardedRoute auth={auth} theme={theme} exact path='/graph/:regionId' component={Graph}/>
+                <AdminGuardedRoute auth={auth} theme={theme} exact path='/contact' component={Contact}/>
             </Switch>
-            { !!Cookies.get("user") && <Button className="home" onClick={() => history.push("/home/")}>Accueil</Button> }
-            { !!Cookies.get("user") && <Button className="contact" onClick={() => history.push("/contact/")}>Contact</Button> }
+            { auth && <Button className="home" onClick={() => history.push("/home/")}>Accueil</Button> }
+            { auth && <Button className="contact" onClick={() => history.push("/contact/")}>Contact</Button> }
             <ThemeMode onChange={toggleTheme} mode={theme}/>
             <Cases/>
             <ToastContainer

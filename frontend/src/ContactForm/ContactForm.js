@@ -1,5 +1,5 @@
 import React, {useContext, useState} from "react";
-import './styled.scss'
+import './ContactForm.scss'
 import axios from "axios";
 import ThemeContext from "../Context/Theme/ThemeContext";
 import {apiUrl} from "../Utils/utils";
