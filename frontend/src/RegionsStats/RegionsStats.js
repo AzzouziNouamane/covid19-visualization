@@ -202,7 +202,7 @@ const RegionsStats = () => {
     };
 
 
-    const columns = ["Région", "Nouveaux cas", "Anxiété", "Dépression","Problèmes de sommeil"];
+    const columns = ["Région", "Nouveaux cas", "Anxiété", "Dépression", "Problèmes de sommeil"];
 
     const theme = useContext(ThemeContext);
     const history = useHistory();

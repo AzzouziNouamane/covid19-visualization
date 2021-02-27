@@ -60,7 +60,7 @@ const LoginFormik = withFormik({
     handleSubmit: (props) => {
 
         if(props.email === "admin@polytech.com" && props.password === "admin" ) {
-            alert('SUCCESS Login');
+            alert('Vous êtes authentifié !');
             window.location.href = "http://localhost:3000/home";
             Cookies.set("user","login");
         } else {
