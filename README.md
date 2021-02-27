@@ -2,21 +2,24 @@
 **AFKS group**
 Rania FEKIH - Anis KHALILI - Nouamane AZZOUZI - Yury SILVESTROV-HENOCQ
 
-**Heroku deployment link**
+**Demo deployment link**
 https://priceless-euclid-ede6dd.netlify.app/
 
 ## How to start the project
-Run the following commands to start the project:
+Run the following commands to start the backend:
 
     $ git clone https://github.com/si5-web-project/covid19-visualization
     $ cd covid19-visualization/backend
     $ npm install
     $ npm run start
-    $ cd ../frontend
+    
+Open a new terminal in covid19-visualization folder and run the following commands to start the frontend:
+
+    $ cd frontend
     $ npm install
     $ npm run start
 
-To run backend tests:
+(to run backend tests):
 
     $ cd backend
     $ npm run start
