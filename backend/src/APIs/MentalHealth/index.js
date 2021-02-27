@@ -83,11 +83,10 @@ router.get('/data/month/:id', async (req, res) => {
 
 });
 
-function formatDate(period) {
+export function formatDate(period) {
 
     let s = period.split("-");
     let date = s[1].split(" ");
-    console.log(date[0]);
     return new Date(2020,months[date[1]]-1,parseInt(date[0])+1);
 
 }
@@ -105,4 +104,4 @@ var months = {
     'Nov' : '11',
     'Dec' : '12'
 }
-export default router;
+export default {router:router , formatDate : formatDate} ;
