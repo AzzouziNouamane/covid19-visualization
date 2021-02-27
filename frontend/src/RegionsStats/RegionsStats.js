@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import Map from "./Map/Map";
 import List from "./List/List";
 import DateSlider from "./DateSlider/DateSlider";
@@ -11,11 +11,7 @@ import {REGIONS} from "./Map/Region/regions";
 import UseLocalStorage from "../Utils/LocalStorage/UseLocalStorage";
 import 'react-toastify/dist/ReactToastify.css';
 import {dataLoadingError} from "../Utils/utils";
-import {BrowserRouter, Link, Redirect} from "react-router-dom";
-import Button from "reactstrap/lib/Button";
 import "../App.scss";
-import ThemeContext from "../Context/Theme/ThemeContext";
-import {useHistory} from "react-router-dom";
 
 
 const getUserRegionId = async (lat, lon) => {
