@@ -44,15 +44,15 @@ export const List = ({ userRegionId, columns, newCasesNow, mentalHealthNow }) =>
             </tbody>
         </Table>
     );
-}
+};
 
 List.propTypes = {
     columns: PropTypes.arrayOf(PropTypes.string).isRequired,
-    newCasesNowData: PropTypes.arrayOf(PropTypes.shape())
+    newCasesNow: PropTypes.arrayOf(PropTypes.shape())
 };
 
 List.defaultProps = {
-    newCasesNowData: []
+    newCasesNow: []
 };
 
 export default List;
