@@ -74,3 +74,20 @@ body.dark {
   background-color: #282c34;
   color: #fff;
 }
+
+#contact{
+  position: absolute;
+  margin-left: 30%;
+}
+Button {
+  transition: all 0.2s ease-in-out;
+  font: 18px Helvetica, Arial, sans-serif;
+  border: none;
+  background: black;
+  color: #fff;
+  padding: 20px;
+  width: 48%;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  margin: 5% 1%;
+}
