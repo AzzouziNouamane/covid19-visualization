@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Map from "./Map/Map";
 import List from "./List/List";
 import DateSlider from "./DateSlider/DateSlider";
@@ -11,7 +11,12 @@ import {REGIONS} from "./Map/Region/regions";
 import UseLocalStorage from "../Utils/LocalStorage/UseLocalStorage";
 import 'react-toastify/dist/ReactToastify.css';
 import {dataLoadingError} from "../Utils/utils";
-import {Redirect} from "react-router-dom";
+import {BrowserRouter, Link, Redirect} from "react-router-dom";
+import Button from "reactstrap/lib/Button";
+import "../App.css";
+import ThemeContext from "../Context/Theme/ThemeContext";
+import {useHistory} from "react-router-dom";
+
 
 const getUserRegionId = async (lat, lon) => {
     let regionId;
@@ -199,6 +204,9 @@ const RegionsStats = () => {
 
     const columns = ["Région", "Nouveaux cas", "Anxiété", "Dépression","Problèmes de sommeil"];
 
+    const theme = useContext(ThemeContext);
+    const history = useHistory();
+
     return (
 
         <div className="RegionsStats">
@@ -230,6 +238,9 @@ const RegionsStats = () => {
                     defaultChecked={!modeMap}
                 />
             </div>
+            <Button  onClick={() => history.push("/contact")} style={{ backgroundColor : theme.isDark? "white" : "black", color : theme.isDark? "black" : "white", }} > Contact </Button>
+
+
         </div>
     );
 };
