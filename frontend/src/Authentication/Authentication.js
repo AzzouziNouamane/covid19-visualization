@@ -5,7 +5,6 @@ import "./Authentication.scss";
 import ThemeContext from "../Context/Theme/ThemeContext";
 import Cookies from "js-cookie"
 
-
 const Authentication = (props) => {
     const theme = useContext(ThemeContext);
 
@@ -61,7 +60,8 @@ const LoginFormik = withFormik({
 
         if(props.email === "admin@polytech.com" && props.password === "admin" ) {
             alert('Vous êtes authentifié !');
-            window.location.href = "http://localhost:3000/home";
+            window.location = "home";
+            //window.location.href = apiUrl + "home";
             Cookies.set("user","login");
         } else {
             alert('Email ou mot de passe erroné. Veuillez réessayer. ')
