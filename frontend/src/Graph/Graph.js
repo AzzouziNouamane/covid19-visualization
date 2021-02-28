@@ -12,8 +12,8 @@ import "./Graph.scss";
 
 const Graph = () => {
     let params = useParams();
-    const [nbCases, setCases] = useState({});
-    const [nbMentalCases, setMental] = useState({});
+    const [nbCases, setCases] = useState([]);
+    const [nbMentalCases, setMental] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const fetchData = async () => {
