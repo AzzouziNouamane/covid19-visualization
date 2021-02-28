@@ -58,7 +58,7 @@ const Graph = () => {
 
     return (
         <div className = "Graph">
-             {loading || (!nbCases && !nbMentalCases) ? (
+             { loading ? (
             <div className = "loadingStats">
               <CircularProgress className = "firstSpinner" color="secondary" />
               <CircularProgress className = "secondSpinner" color="secondary" />
@@ -66,8 +66,8 @@ const Graph = () => {
         ) : (
             <div>            
                 <h1 style={{marginTop: "0", paddingTop: "20px"}}>{ REGIONS.find(element => +element.id === +params.regionId)?.name }</h1>
-                <Charto data={nbCases}/>
-                <Charto data={nbMentalCases}/>
+                { nbCases.length > 1 && <Charto data={nbCases}/> }
+                { nbMentalCases.length > 1 && <Charto data={nbMentalCases}/> }
             </div>
         )}
         </div>
